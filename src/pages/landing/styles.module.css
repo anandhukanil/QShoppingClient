@@ -1,0 +1,86 @@
+
+/* AdWrapper Component Styles */
+.adContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 50px 0;
+  flex-wrap: wrap;
+}
+
+
+/* Product List Styles */
+.productListWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* SuggestedProducts Component Styles */
+.productCardWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.suggestionLabelText {
+  margin: 50px 0 -35px 15px;
+}
+
+/* Categories Component Styles */
+
+.categoryCardWrapper {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 7px #dfdfdf;
+  width: 570px;
+  height: 200px;
+  margin: 20px;
+  transition: all ease 200ms;
+  cursor: pointer;
+}
+.categoryCardWrapper:hover {
+  transform: scale(1.03);
+}
+.categoryCardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.categoryCardWrapper img {
+  padding-right: 30px;
+  height: 100%;
+}
+.categoryCardWrapper h3 {
+  margin-top: 0;
+  color: var(--titleText);
+}
+.categoryLabel {
+  text-align: center;
+}
+.categoryCount {
+  font-size: 15px;
+  color: var(--paragraphText);
+}
+
+@media only screen and (max-width: 880px) { 
+.categoryCardWrapper {
+  width: 40vw;
+  height: 7vh;
+  margin: 10px;
+}
+.categoryCardContainer {
+  justify-content: space-between;
+}
+.categoryCardWrapper img {
+  padding-right: 0px;
+  height: 100%;
+}
+.categoryCardWrapper > div {
+  padding: 10px;
+}
+.categoryCardWrapper h3 {
+  margin: 0;
+  font-size: 0.8em;
+}
+.categoryCount {
+  font-size: 12px;
+}
+}
