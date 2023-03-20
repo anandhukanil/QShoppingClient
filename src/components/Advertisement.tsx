@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { getProduct } from "../apis/products";
 import { IProduct } from "../types";
 import LoadingComponent from "./LoadingComponent";
 import styles from "./styles.module.css";
@@ -9,7 +9,7 @@ const Advertisement: React.FC<IProps> = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await axios.get(`/products/${Math.floor((Math.random() * 20) + 1)}`);
+      const data = await getProduct(Math.floor((Math.random() * 20) + 1));
       setProduct(data?.data);
     })();
   }, []);
@@ -25,7 +25,7 @@ const Advertisement: React.FC<IProps> = () => {
               <p className={styles.adTextDescription}>{product.description}</p>
               <button>Buy Now!</button>
             </div>
-            <img src={product.image} />
+            <img src={product.images[0]} />
           </>
         )
         : <LoadingComponent />

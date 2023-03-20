@@ -8,7 +8,8 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://fakestoreapi.com";
+// axios.defaults.baseURL = "https://fakestoreapi.com";
+axios.defaults.baseURL = "https://dummyjson.com";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

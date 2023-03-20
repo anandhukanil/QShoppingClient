@@ -2,7 +2,7 @@ import { call, takeEvery, put, takeLatest, all, takeLeading } from "redux-saga/e
 import { logIn, signUp } from "../../apis/users";
 import { IAction, IUser, Types } from "../../types";
 import {
-  add_to_cart, add_to_wishlist, catch_exceptions, remove_from_cart, remove_from_wishlist,
+  add_to_cart, add_to_wishlist, catch_exceptions, checkout_cart_items, remove_from_cart, remove_from_wishlist,
   user_login, user_logout, user_signup
 } from "../actionsAndReducers/users";
 
@@ -93,10 +93,22 @@ export function* removeFromWishlistSaga() {
   yield takeEvery(Types.REMOVE_FROM_WISHLIST, removeFromWishlist);
 }
 
+function* checkoutCartItems() {
+  try {
+    yield put(checkout_cart_items());
+  } catch (error) {
+    yield put(catch_exceptions("Error while checkout!"));
+  }
+}
+
+export function* checkoutCartItemsSaga() {
+  yield takeEvery(Types.CHECKOUT_CART_ITEMS, checkoutCartItems);
+}
+
 
 export default function* userSaga() {
   yield all([
     signUpUserSaga(), loginUserSaga(), logoutUserSaga(), addToCartSaga(), removeFromCartSaga(),
-    addToWishListSaga(), removeFromWishlistSaga(), 
+    addToWishListSaga(), removeFromWishlistSaga(), checkoutCartItemsSaga(),
   ]);
 }

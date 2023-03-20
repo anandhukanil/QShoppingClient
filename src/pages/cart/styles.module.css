@@ -1,0 +1,185 @@
+
+.categoryCardWrapper {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e1e1e1;
+  width: calc(100% - 40px);
+  height: 150px;
+  margin: 20px;
+  transition: all ease 200ms;
+}
+.cartWrapper > div:first-child {
+  margin-left: 0;
+}
+.categoryCardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.categoryCardWrapper img {
+  padding: 30px;
+  height: 100px;
+  width: 100px;
+}
+.categoryCardWrapper h3 {
+  margin: 0;
+  margin-right: 40px;
+  color: var(--titleText);
+}
+.categoryLabel {
+  text-align: center;
+}
+.categoryCount {
+  font-size: 15px;
+  color: var(--paragraphText);
+}
+
+@media only screen and (max-width: 1150px) { 
+.categoryCardContainer {
+  justify-content: space-between;
+}
+.categoryCardWrapper h3 {
+  margin: 0;
+  font-size: 0.8em;
+}
+.categoryCount {
+  font-size: 12px;
+}
+.cartWrapper > div {
+  width: calc(100vw - 32px)!important;
+  max-width: calc(100vw - 32px);
+  flex-basis: auto!important;
+}
+}
+
+@media only screen and (max-width: 650px) {
+  .categoryCardWrapper {
+    flex-direction: column;
+    height: auto;
+  }
+  .categoryCardWrapper img {
+    height: auto;
+    padding: 0;
+  }
+  .cartProductPrice {
+    flex-direction: column;
+    padding: 0;
+  }
+  .categoryCardWrapper h3 {
+    margin: 20px 0;
+  }
+  .cartRightWrapper {
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .cartRightWrapper > div h4 {
+    min-width: auto!important;
+  }
+}
+
+.cartWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.cartWrapper > div {
+  width: auto;
+  max-width: none;
+}
+.cartProductPrice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 20px;
+}
+.cartProductPrice h4 {
+  margin: 0;
+}
+.cartRightWrapper {
+  display: flex;
+  align-items: center;
+}
+.cartRightWrapper > div {
+  display: flex;
+  align-items: center;
+}
+.cartRightWrapper > div h4 {
+  margin-left: 30px;
+  min-width: 100px;
+  text-align: right;
+}
+.cartRightWrapper > div button {
+  background-color: white;
+  padding: 10px;
+  line-height: 1;
+  border-radius: 50%;
+  border: 1px solid #e1e1e1;
+  cursor: pointer;
+}
+.cartRightWrapper > div > div > span {
+  margin: 0 10px;
+  padding: 5px 15px;
+  border: 1px solid #e1e1e1;
+  cursor: default;
+}
+.cartRightWrapper > div button:hover {
+  background-color: #f1f1f1;
+}
+.cartRightWrapper > svg {
+  font-size: 20px;
+  margin-left: 30px;
+  color: var(--paragraphText);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.cartRightWrapper > svg:hover {
+  color: var(--titleText);
+}
+.cartPaymentSummaryItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px 20px 20px;
+}
+.cartWrapper > div:first-child {
+  flex-basis: 60%;
+}
+.cartWrapper > div:nth-child(2) {
+  flex-basis: 30%;
+  height: fit-content;
+}
+.cartWrapper > div:nth-child(2) > div {
+  max-width: none;
+}
+.cartPaymentSummaryItem > div:only-child {
+  font-weight: 600;
+}
+.cartPaymentSummaryItem:nth-child(4) {
+  border-top: 3px dotted #e1e1e1;
+  border-bottom: 3px dotted #e1e1e1;
+}
+.discountItem {
+  color: green;
+}
+.cartWrapper .cartButtonWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.cartWrapper div.cartButtonWrapper button {
+  display: inline-block;
+  transition: 0.2s;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: white;
+  border-radius: 30px;
+  padding: 20px 40px;
+}
+.cartWrapper div.cartButtonWrapper button:hover {
+  background-color: var(--primaryDark);
+}

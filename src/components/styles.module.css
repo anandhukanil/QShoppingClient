@@ -8,6 +8,7 @@
   position: relative;
   height: 70px;
   z-index: 999;
+  padding-bottom: 10px;
 }
 
 .navbarContainer {
@@ -25,6 +26,7 @@
   text-decoration: none;
   font-size: 1.5rem;
   font-family: "Pacifico", Arial, Helvetica, sans-serif;
+  user-select: none;
 }
 
 .navbarToggle {
@@ -55,6 +57,11 @@
   color: var(--titleText);
   text-decoration: none;
   position: relative;
+}
+
+.navbarItem > a > svg {
+  margin-right: 5px;
+  vertical-align: text-top;
 }
 
 .navbarItem a:hover {
@@ -125,7 +132,7 @@
     display: none;
     flex-direction: column;
     width: 100%;
-    /* margin-top: 1rem; */
+    padding-top: 1rem;
   }
 
   .navbarMenu.active {
@@ -135,15 +142,25 @@
 
   .navbarItems {
     flex-direction: column;
+    align-items: flex-start;
     margin: 0;
   }
 
   .navbarItem {
     margin: 0.5rem 0;
   }
+  .navbarItem:not(:first-child) {
+    margin-left: 13px;
+  }
 
   .navbarSearch {
     margin: 1rem 0 0 0;
+  }
+  .navbarItem.searchItem {
+    margin-left: 10px!important;
+  }
+  .searchWrapper .searchButton {
+    width: auto!important;
   }
 }
 
@@ -155,7 +172,7 @@
   max-width: 48vw;
 }
 .adWrapper > img {
-  width: auto;
+  width: 200px;
   height: 200px;
   border-radius: 25px;
 }
@@ -168,6 +185,7 @@
 }
 .adWrapper > .adTextWrapper > .adTextTitle {
   font-size: 1.5rem;
+  margin-bottom: 10px;
 }
 .adWrapper > .adTextWrapper > .adTextDiscount {
   font-size: 11px;
@@ -208,7 +226,7 @@
     width: 100%;
     max-width: 100%;
     flex-direction: column-reverse;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
   .adWrapper img {
     max-width: calc(100vw - 32px);
@@ -340,7 +358,7 @@
   font-size: 20px;
   cursor: pointer;
 }
-.productCardWrapper .wishList.active {
+.productCardWrapper .wishList.liked {
   animation: like 0.5s ease-in-out 1;
   color: var(--red)
 }
@@ -708,4 +726,156 @@ nav + .carousel {
 
 .socialMedia a:hover {
   color: #ccc;
+}
+
+/* Card with Header component styles */
+.cardWithHeaderContainer {
+  /* box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2); */
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem;
+  max-width: 400px;
+}
+
+.cardWithHeaderHeader {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+
+
+/* Notification Toast Component Styles */
+
+.toast {
+  position: fixed;
+  top: 100px;
+  right: 25px;
+  width: 375px;
+  background: #FFF;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+/*   gap: 20px; */
+  border-radius: 12px;
+  /* border-left: 3px solid red; */
+  overflow: hidden;
+  transform: translateX(calc(100% + 25px));
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  box-sizing: border-box;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  max-width: 70vw;
+}
+
+.toast.toastActive {
+  transform: translateX(0);
+}
+
+.toast svg:first-child {
+  font-size: 20px;
+}
+
+.toastText {
+  margin: 0;
+  font-size: .8125rem;
+  text-transform: uppercase;
+}
+
+.toast svg:last-child {
+  color: #ccc;
+  cursor: pointer;
+  transition: 350ms;
+}
+
+.toast svg:last-child:hover {
+  color: #333;
+}
+
+
+/* Error Page Component Styles */
+.errorFullPageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: calc(100vw - 32px);
+}
+.errorPageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.errorFullPageWrapper img {
+  width: 50vw;
+  margin-bottom: 50px;
+  max-width: 500px;
+}
+.errorFullPageWrapper > div {
+  text-align: center;
+}
+.errorFullPageWrapper > div h1 {
+  color: var(--titleText);
+}
+.errorFullPageWrapper > div p {
+  color: var(--paragraphText);
+}
+
+/* Search Component Styles */
+.searchWrapper {
+  position: relative;
+  height: 50px;
+}
+.navbarItem.searchItem {
+  margin-left: 20px;
+}
+.searchWrapper .searchInput {
+  background-color: white;
+  border: 0;
+  font-size: 18px;
+  /* padding: 15px; */
+  height: 50px;
+  width: 50px;
+  transition: width 0.3s ease;
+}
+.searchWrapper .searchButton {
+  background-color: white;
+  border: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 50px;
+  transition: transform 0.3s ease;
+}
+
+.searchWrapper .searchButton:focus,
+.searchInput:focus {
+  outline: none;
+}
+
+.searchWrapper .searchButton:hover {
+  color: var(--primary);
+}
+
+.searchWrapper.searchActive .searchInput {
+  width: 200px;
+}
+
+.searchWrapper.searchActive .searchInput::placeholder  {
+  color: var(--primary);
+  opacity: 1;
+}
+
+.searchWrapper.searchActive .searchButton {
+  transform: translateX(198px);
 }

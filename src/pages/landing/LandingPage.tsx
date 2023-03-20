@@ -6,7 +6,7 @@ import Categories from "./components/Categories";
 import { IState, Types } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import CarouselComponent from "../../components/CarouselComponent";
-import images from "../../assets";
+import { banners } from "../../assets";
 import AdWrapperComponent from "./components/AdHolderComponent";
 
 const LandingPage: React.FC<IProps> = () => {
@@ -18,12 +18,12 @@ const LandingPage: React.FC<IProps> = () => {
   }, []);
 
   const recentProducts = useMemo(() => products && [...products].reverse().slice(0, 5), [products]);
-  const popularProducts = useMemo(() => products && [...products].sort((a, b) => a.rating?.count - b.rating?.count)
+  const popularProducts = useMemo(() => products && [...products].sort((a, b) => a.rating - b.rating)
     .slice(0, 5),[products]);
 
   return (
     <div>
-      <CarouselComponent images={images} />
+      <CarouselComponent images={banners} />
       <SuggestedProducts />
       <Categories />
       <Banner />

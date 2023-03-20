@@ -2,10 +2,11 @@
 /* AdWrapper Component Styles */
 .adContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   margin: 50px 0;
   flex-wrap: wrap;
+  background-color: white;
 }
 
 

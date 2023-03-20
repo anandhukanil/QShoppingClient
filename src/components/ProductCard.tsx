@@ -1,5 +1,5 @@
-import React from "react";
-import { IProduct, IState, Types } from "../types";
+import React, { useMemo } from "react";
+import { IProduct, IState, NotificationTypes, Types } from "../types";
 import RatingComponent from "./RatingComponent";
 import { FaHeart, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import styles from "./styles.module.css";
@@ -11,41 +11,47 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
   const dispatch = useDispatch();
   const path = generatePath("/products/:id", {id: String(product.id)});
 
-  const wishListed = wishListItems.some((item) => item.id === product.id);
-  const itemInCartCount = cartItems.find((cartItem) => cartItem.item.id === product.id)?.count;
+  const wishListed = wishListItems.some((item) => item.id === product?.id);
+  const itemInCartCount = useMemo(() => cartItems
+    .find((cartItem) => cartItem.item.id === product?.id)?.count,
+  [cartItems]);
 
   const onWhishListClick = () => {
     if (wishListed) {
       dispatch({ type: Types.REMOVE_FROM_WISHLIST, payload: product });
     } else {
       dispatch({ type: Types.ADD_TO_WISHLIST, payload: product });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Item added to Wishlist!" }
+      });
     }
   };
 
   const onAddToCartClick = () => {
-    dispatch({ type: Types.ADD_TO_CART, payload: product });
+    dispatch({ type: Types.ADD_TO_CART, payload: { product } });
   };
 
   const onRemoveFromCartClick = () => {
-    dispatch({ type: Types.REMOVE_FROM_CART, payload: product });
+    dispatch({ type: Types.REMOVE_FROM_CART, payload: {product} });
   };
 
   return (
     <div className={styles.productCardWrapper}>
       <div
-        className={wishListed ? `${styles.wishList} ${styles.active}` : styles.wishList}
+        className={wishListed ? `${styles.wishList} ${styles.liked}` : styles.wishList}
         onClick={onWhishListClick}
       >
         <FaHeart />
       </div>
       <div className={styles.productThumbnail}>
-        <img src={product.image} alt={product.title} />
+        <img src={product.thumbnail} alt={product.title} />
       </div>
       <div className={styles.productDetails}>
         <span className={styles.productCategory}>{product.category}</span>
         <h4><Link to={path}>{product.title}</Link></h4>
         <div className={styles.ratingsWrapper}>
-          <RatingComponent rating={product.rating?.rate} count={product.rating?.count} />
+          <RatingComponent rating={product.rating} count={Math.floor((Math.random() * 2000) + 1)} />
         </div>
         <p>{product.description}</p>
         <div className={styles.productBottomDetails}>

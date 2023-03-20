@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserState, SliceNames, Types } from "../../types";
-
+const user = {
+  id: 1,
+  firstName: "Anandhu",
+  lastName: "Anil",
+  mobileNumber: 9656786915,
+  email: "anandhukanil@gmail.com"
+};
 const INITIAL_STATE: IUserState = {
-  currentUser: undefined,
+  currentUser: user,
   cartItems: [],
   wishListItems: [],
   error: ""
@@ -22,21 +28,22 @@ const userSlice = createSlice({
       return { ...state, currentUser : action.payload };
     },
     [Types.ADD_TO_CART]: (state, action) => {
-      const cartItems = state.cartItems.some((product) => product.item?.id === action.payload?.id)
+      const cartItems = state.cartItems
+        .some((product) => product.item?.id === action.payload?.product?.id)
         ? state.cartItems
           .map(
-            (product) => product.item?.id === action.payload?.id
-              ? { ...product, count: product.count + 1 }
+            (product) => product.item?.id === action.payload?.product?.id
+              ? { ...product, count: product.count + (action.payload.count || 1) }
               : product
           )
-        : [...state.cartItems, { item: action.payload, count: 1 }];
+        : [...state.cartItems, { item: action.payload?.product, count: (action.payload.count || 1) }];
       return { ...state, cartItems };
     },
     [Types.REMOVE_FROM_CART]: (state, action) => {
       const cartItems = state.cartItems
         .map(
-          (product) => product.item?.id === action.payload?.id
-            ? { ...product, count: product.count - 1 }
+          (product) => product.item?.id === action.payload?.product?.id
+            ? { ...product, count: product.count - (action.payload.count || 1) }
             : product
         ).filter((product) => product.count > 0);
       return { ...state, cartItems };
@@ -48,6 +55,9 @@ const userSlice = createSlice({
       const wishListItems = state.wishListItems.filter((item) => item.id !== action.payload?.id);
       return { ...state, wishListItems };
     },
+    [Types.CHECKOUT_CART_ITEMS] : (state) => {
+      return { ...state, cartItems: [] };
+    },
     [Types.CATCH_EXCEPTIONS]: (state, action) => {
       return { ...state, error : action.payload };
     }
@@ -56,7 +66,7 @@ const userSlice = createSlice({
 
 export const { 
   user_login, user_logout, user_signup, add_to_cart, add_to_wishlist, remove_from_cart,
-  remove_from_wishlist, catch_exceptions
+  remove_from_wishlist, checkout_cart_items, catch_exceptions
 } = userSlice.actions;
 
 export default userSlice.reducer;

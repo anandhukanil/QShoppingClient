@@ -9,3 +9,7 @@ export const getAllProducts = (limit=0) => (
 export const getProduct = (productId: number) => (
   axios.get(`/products/${productId}`)
 );
+
+export const searchProducts = (query: string) => (
+  axios.get(`/products/search?q=${query}`)
+);
