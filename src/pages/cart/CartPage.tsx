@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { emptyCart, orderDelivered } from "../../assets";
 import CardWithHeader from "../../components/CardWithHeader";
 import ErrorPage from "../../components/ErrorPage";
-import { formatCurrency } from "../../helpers.ts";
+import { formatCurrency } from "../../helpers";
 import { IProduct, IState, NotificationTypes, Types } from "../../types";
 import styles from "./styles.module.css";
 

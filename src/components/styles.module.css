@@ -118,6 +118,9 @@
   text-align: center;
   color: white;
 }
+.navLinkHiddenItem {
+  display: none;
+}
 
 @media screen and (max-width: 768px) {
   .navbarContainer {
@@ -149,7 +152,7 @@
   .navbarItem {
     margin: 0.5rem 0;
   }
-  .navbarItem:not(:first-child) {
+  .navbarItem > a {
     margin-left: 13px;
   }
 
@@ -192,13 +195,13 @@
   color: var(--red);
 }
 .adWrapper > .adTextWrapper > .adTextDescription {
-  font-size: 12px;
+  /* font-size: 12px; */
   margin: 0;
   font-weight: 200;
   word-break: break-word;
   max-width: 350px;
   text-align: left;
-  color: var(--paragraphText);
+  /* color: var(--paragraphText); */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3; 
@@ -326,7 +329,7 @@
 
 /* ProductCard Component Styles */
 .productCardWrapper {
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   width: 350px;
   position: relative;
   box-shadow: 0 2px 7px #dfdfdf;
@@ -878,4 +881,66 @@ nav + .carousel {
 
 .searchWrapper.searchActive .searchButton {
   transform: translateX(198px);
+}
+
+
+/* Form Component Styles */
+
+.errorMessage {
+  margin-left: 5px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--red);
+}
+.errorField {
+  border: 1px solid var(--red)!important;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+}
+.inputWrapper input {
+  flex-grow: 1;
+}
+
+.tooltip{
+  position: relative;
+  background: var(--grey);
+  padding: 2px 10px;
+  border-radius: 50%;
+  margin-left: 5px;
+  cursor: default;
+}
+
+.tooltip::before, .tooltip::after{
+  position: absolute;
+  left: 50%;
+  opacity: 0;
+  transition: all ease 0.3s;
+}
+
+.tooltip::before{
+  content: "";
+  border-width: 10px 8px 0 8px;
+  border-style: solid;
+  border-color: #d6d6d666 transparent transparent transparent;
+  top: -20px;
+  margin-left: -8px;
+}
+
+.tooltip::after{
+  content: attr(data-tooltip);
+  background: #d6d6d666;
+  top: -20px;
+  transform: translateY(-100%);
+  font-size: 14px;
+  margin-left: -150px;
+  width: 300px;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.tooltip:hover::before, .tooltip:hover::after{
+  opacity: 1;
 }

@@ -22,7 +22,7 @@ export function* signUpUserSaga() {
 
 function* loginUser(action: IAction) {
   try {
-    const user: IUser = yield call(() => logIn(action.payload as { userName: string, passWord: string }));
+    const user: IUser = yield call(() => logIn(action.payload as { username: string, password: string }));
     yield user ? put(user_login(user)) : put(catch_exceptions("User not found"));
   } catch (error) {
     yield put(catch_exceptions("Error while logging in!"));

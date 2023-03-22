@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { FaBars, FaShoppingCart } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useCallback, useMemo, useState } from "react";
+import { FaBars, FaShoppingCart, FaSignInAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
 import { FaBoxOpen, FaHeart, FaSignOutAlt, FaUser, FaUserCog } from "react-icons/fa";
-import { IMenuItem, IState } from "../types";
+import { IMenuItem, IState, Types } from "../types";
 import {routes} from "../routes/routes";
 import styles from "./styles.module.css";
 import Search from "./Search";
@@ -11,7 +11,37 @@ import DropdownMenu from "./DropdownMenu";
 
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const dispatch = useDispatch();
   const { cartItems, currentUser } = useSelector((state: IState) => state.users);
+
+
+  const onSignOut = useCallback(() => {
+    dispatch({ type: Types.USER_LOGOUT });
+  }, [dispatch]);
+
+  const options: IMenuItem[] = useMemo(() => [
+    {
+      label: "Profile",
+      path: routes.profile?.path,
+      icon: FaUserCog
+    },
+    {
+      label: "Wishlists",
+      path: [routes.profile?.path, routes.profile?.children[0]?.path].join("/"),
+      icon: FaHeart
+    },
+    {
+      label: "Orders",
+      path: [routes.profile?.path, routes.profile?.children[1]?.path].join("/"),
+      icon: FaBoxOpen
+    },
+    {
+      label: "SignOut",
+      path: routes.landing.path,
+      icon: FaSignOutAlt,
+      onClick: onSignOut,
+    }
+  ], [onSignOut]);
 
 
   return (
@@ -38,7 +68,14 @@ const Navbar: React.FC = () => {
                   />
                 )
                 : (
-                  <Link key="Login" to="#">Login/Signup</Link>
+                  <NavLink
+                    key="Login"
+                    to={routes.login.path}
+                    className={({isActive}) => isActive ? styles.navLinkHiddenItem : ""}
+                  >
+                    <FaSignInAlt />
+                    Login
+                  </NavLink>
                 )}
             </li>
             <li className={styles.navbarItem}>
@@ -67,27 +104,3 @@ const LabelComponent = () => (
     Account
   </Link>
 );
-
-const options: IMenuItem[] = [
-  {
-    label: "Profile",
-    path: routes.profile?.path,
-    icon: FaUserCog
-  },
-  {
-    label: "Wishlists",
-    path: [routes.profile?.path, routes.profile?.children[0]?.path].join("/"),
-    icon: FaHeart
-  },
-  {
-    label: "Orders",
-    path: [routes.profile?.path, routes.profile?.children[1]?.path].join("/"),
-    icon: FaBoxOpen
-  },
-  {
-    label: "SignOut",
-    path: routes.landing.path,
-    icon: FaSignOutAlt,
-    onClick: () => alert("Sign Out!"),
-  }
-];

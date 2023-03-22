@@ -6,6 +6,7 @@ import Wishlist from "../pages/profile/Wishlist";
 import { IRoutes } from "../types";
 import ProductDetailsPage from "../pages/listing/ProductDetailsPage";
 import ProductListing from "../pages/listing/ProductListing";
+import LogInSignUpPage from "../pages/login/LogInSignUpPage";
 
 export const routes: IRoutes = {
   landing: {
@@ -52,13 +53,7 @@ export const routes: IRoutes = {
   login: {
     path: "/login",
     name: "login",
-    element: <LandingPage />,
-    children: [
-      {
-        path: "signup",
-        name: "sign-up",
-        element: <LandingPage />,
-      }
-    ]
+    element: <LogInSignUpPage />,
+    children: []
   }
 };

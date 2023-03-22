@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./carouselComponentStyles.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const CarouselComponent: React.FC<IProps> = ({images}) => {
+const CarouselComponent: React.FC<IProps> = ({images, disableAutoSwitch}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timer;
+    if (!disableAutoSwitch) {
+      timer = setInterval(() => handleNextClick(), 2500);
+    }
+
+    return () => { timer && clearInterval(timer); };
+  }, [disableAutoSwitch]);
   
   const handlePrevClick = () => {
-    setCurrentImageIndex(currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1);
+    setCurrentImageIndex((prevState) => prevState === 0 ? images.length - 1 : prevState - 1);
   };
   
   const handleNextClick = () => {
-    setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
+    setCurrentImageIndex((prevState) => prevState === images.length - 1 ? 0 : prevState + 1);
   };
   
   return (
@@ -35,4 +44,5 @@ export default CarouselComponent;
 
 export interface IProps {
   images: string[];
+  disableAutoSwitch?: boolean;
 }

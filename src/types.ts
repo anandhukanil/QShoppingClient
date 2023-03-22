@@ -37,7 +37,6 @@ export interface IUser {
   id: number;
   firstName: string;
   lastName: string;
-  mobileNumber: number;
   email: string;
 }
 
@@ -116,4 +115,28 @@ export interface IRoute {
 
 export interface IRoutes {
   [key: string]: IRoute & { children: IRoute[]};
+}
+
+export enum FieldTypes {
+  Text = "text",
+  Password = "password",
+  Email = "email",
+  Submit = "submit",
+}
+export interface IFormField {
+  fieldType: FieldTypes;
+  name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+  label?: string;
+  placeholder?: string;
+  required?: boolean;
+  className?: string;
+  validationRules?: {
+    minLength?: number;
+    maxLength?: number;
+  };
+  customValidation?: (values: Record<string, string>, name: string) => ({success: boolean, error: string});
+  tooltip?: string;
+  skipValidation?: boolean;
 }

@@ -6,13 +6,12 @@ import RatingComponent from "../../../components/RatingComponent";
 import { IProduct, IState, NotificationTypes, Types } from "../../../types";
 import ImageHolder from "./ImageHolder";
 import styles from "../styles.module.css";
-import { formatCurrency, getActualPrice } from "../../../helpers.ts";
+import { formatCurrency, getActualPrice } from "../../../helpers";
 import { routes } from "../../../routes/routes";
 import LoadingComponent from "../../../components/LoadingComponent";
 
 const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
   const [itemCount, setItemCount] = useState<number>(1);
-  const [ratingCount] = useState<number>(Math.floor((Math.random() * 2000) + 1));
   const { users: {wishListItems, cartItems}, products: {dataLoading} } = useSelector((state: IState) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,7 +74,7 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
               <p>{product?.description}</p>
             </div>
             <div className={styles.productRating}>
-              <RatingComponent count={ratingCount} rating={product?.rating} />
+              <RatingComponent count={product?.stock*11} rating={product?.rating} />
             </div>
             <div className={styles.productPrice}>
               <h3>{formatCurrency(product?.price)}</h3>

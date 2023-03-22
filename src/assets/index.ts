@@ -12,10 +12,13 @@ const warning = require("./warning.svg").default;
 const orderDelivered = require("./orderDelivered.svg").default;
 const wishlist = require("./wishlist.svg").default;
 const notFound = require("./notFound.svg").default;
+const welcome = require("./welcome.svg").default;
+const login = require("./login.svg").default;
+const googleLogo = require("./googleLogo.svg").default;
 
 export {
   banner1, banner2, banner3, banner4, banner5, banner6, emptyCart, pageNotFound, warning, orderDelivered,
-  wishlist, notFound
+  wishlist, notFound, welcome, login, googleLogo
 };
 
 export const banners = [banner2, banner3, banner4, banner5, banner6];

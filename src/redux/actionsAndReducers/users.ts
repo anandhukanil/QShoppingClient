@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserState, SliceNames, Types } from "../../types";
-const user = {
-  id: 1,
-  firstName: "Anandhu",
-  lastName: "Anil",
-  mobileNumber: 9656786915,
-  email: "anandhukanil@gmail.com"
-};
+// const user = {
+//   id: 1,
+//   firstName: "Anandhu",
+//   lastName: "Anil",
+//   mobileNumber: 9656786915,
+//   email: "anandhukanil@gmail.com"
+// };
 const INITIAL_STATE: IUserState = {
-  currentUser: user,
+  currentUser: undefined,
   cartItems: [],
   wishListItems: [],
   error: ""

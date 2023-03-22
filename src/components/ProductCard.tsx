@@ -51,7 +51,7 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
         <span className={styles.productCategory}>{product.category}</span>
         <h4><Link to={path}>{product.title}</Link></h4>
         <div className={styles.ratingsWrapper}>
-          <RatingComponent rating={product.rating} count={Math.floor((Math.random() * 2000) + 1)} />
+          <RatingComponent rating={product.rating} count={product?.stock*11} />
         </div>
         <p>{product.description}</p>
         <div className={styles.productBottomDetails}>

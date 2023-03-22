@@ -6,6 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { OAuthClientID } from "./const/creds";
 
 // axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = "https://fakestoreapi.com";
@@ -18,9 +20,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <GoogleOAuthProvider clientId={OAuthClientID}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </GoogleOAuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -26,6 +26,13 @@ const Search: React.FC<IProps> = () => {
     }
   };
 
+  const onBlur = () => {
+    if (ref?.current) {
+      ref.current.value = ""; 
+    }
+    setActive(false);
+  };
+
   return (
     <div
       className={styles.searchWrapper + (active ? ` ${styles.searchActive}` : "")}
@@ -34,6 +41,7 @@ const Search: React.FC<IProps> = () => {
         type="text"
         ref={ref}
         onKeyDown={onKeyDown}
+        onBlur={onBlur}
         className={styles.searchInput}
         placeholder={active? "Search..." : ""}
       />
