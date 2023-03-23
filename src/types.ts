@@ -34,10 +34,14 @@ export interface IProduct {
   // rating: Rating;
 }
 export interface IUser {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
+}
+
+export interface IUserData extends IUser {
+  hash: string;
 }
 
 export enum Types {
@@ -47,9 +51,8 @@ export enum Types {
   SET_DATA_LOADING = "set_data_loading",
 
   // User Actions
-  USER_LOGIN = "user_login",
+  SET_CURRENT_USER = "set_current_user",
   USER_LOGOUT = "user_logout",
-  USER_SIGNUP = "user_signup",
   ADD_TO_CART = "add_to_cart",
   REMOVE_FROM_CART = "remove_from_cart",
   ADD_TO_WISHLIST = "add_to_wishlist",
@@ -114,11 +117,12 @@ export interface IRoute {
 }
 
 export interface IRoutes {
-  [key: string]: IRoute & { children: IRoute[]};
+  [key: string]: (IRoute & { children: IRoute[], protected?: boolean });
 }
 
 export enum FieldTypes {
   Text = "text",
+  Number = "number",
   Password = "password",
   Email = "email",
   Submit = "submit",

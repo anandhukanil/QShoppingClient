@@ -393,6 +393,14 @@ body {
   }
 }
 
+.loginErrorMessage {
+  text-align: center;
+  color: #ff4b4b;
+  /* padding: 10px; */
+  /* color: white; */
+  /* font-weight: bold; */
+  /* border-radius: 5px; */
+}
 
 /* .navbarLogo {
   color: var(--titleText);

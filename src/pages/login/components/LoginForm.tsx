@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { loginFields } from "../../../const/fields";
-import "../styles.css";
-import FormComponent from "../../../components/FormComponent";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
-import { IUser, NotificationTypes, Types } from "../../../types";
-import { useNavigate } from "react-router-dom";
-import { routes } from "../../../routes/routes";
+import bcrypt from "bcryptjs";
+import { loginFields } from "../../../const/fields";
+import FormComponent from "../../../components/FormComponent";
+import { NotificationTypes, Types } from "../../../types";
+import { addUser, getUser } from "../../../apis/users";
+import { getDataFromGoogle } from "../../../helpers";
+import "../styles.css";
 
-const LoginForm: React.FC<IProps> = ({onToggleForm}) => {
+const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
   const [buttonWidth, setButtonWidth] = useState<number>(380);
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.addEventListener("resize", onWindowResized);
@@ -32,19 +33,22 @@ const LoginForm: React.FC<IProps> = ({onToggleForm}) => {
     fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${response?.credential}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", {data});
-        const user = getDataFromGoogle(data);
+        const userData = getDataFromGoogle(data);
+        let user = getUser(userData?.email);
+        if (!user) {
+          user = addUser({ ...userData, hash: "" });
+        }
         dispatch({
-          type: Types.USER_SIGNUP,
+          type: Types.SET_CURRENT_USER,
           payload: user
         });
         dispatch({
           type: Types.SET_NOTIFICATION,
           payload: { type: NotificationTypes.Success, message: "Login Success!" }
         });
-        navigate(routes.landing.path);
+        onLoginCompleted();
       })
-      .catch((err) => {
+      .catch(() => {
         dispatch({
           type: Types.SET_NOTIFICATION,
           payload: { type: NotificationTypes.Error, message: "Failed to login!" }
@@ -63,16 +67,31 @@ const LoginForm: React.FC<IProps> = ({onToggleForm}) => {
   const onSignIn = (values: Record<string, string>) => {
     setLoading(true);
     const { username, password } = values;
-    dispatch({
-      type: Types.USER_LOGIN,
-      payload: { username, password }
-    });
-    dispatch({
-      type: Types.SET_NOTIFICATION,
-      payload: { type: NotificationTypes.Success, message: "Login Success!" }
-    });
-    setLoading(false);
-    navigate(routes.landing.path);
+    const user = getUser(username);
+    if (!user) {
+      setErrorMessage("User not found!");
+      setLoading(false);
+      return;
+    }
+    if (bcrypt.compareSync(password, user.hash)) {
+      dispatch({
+        type: Types.SET_CURRENT_USER,
+        payload: {...user, hash: ""}
+      });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Login Success!" }
+      });
+      setLoading(false);
+      onLoginCompleted();
+    } else {
+      setErrorMessage("Password is incorrect!");
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Login Failed!" }
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,7 +110,7 @@ const LoginForm: React.FC<IProps> = ({onToggleForm}) => {
             <input autoComplete="off" type="checkbox" checked id="remember" /><label htmlFor="remember">Remember me</label>
           </div>
         <a href="#" className="link forgot-link">Forgot Password ?</a> */}
-
+        {errorMessage && <div className="loginErrorMessage">{errorMessage}</div>}
         <div className="sign-in-seperator">
           <span>or</span>
         </div>
@@ -112,11 +131,5 @@ export default LoginForm;
 
 export interface IProps {
   onToggleForm: () => void;
+  onLoginCompleted: () => void;
 }
-
-const getDataFromGoogle = (data: Record<string, string>): IUser => ({
-  firstName: data.given_name,
-  lastName: data.family_name,
-  email: data.email,
-  id: Math.floor((Math.random() * 999999) + 1)
-});

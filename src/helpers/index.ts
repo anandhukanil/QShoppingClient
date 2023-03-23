@@ -1,3 +1,5 @@
+import { IUser } from "../types";
+
 export const getActualPrice = (price: number, discount: number) => {
   return formatCurrency((price / (1 - discount/100)));
 };
@@ -23,3 +25,15 @@ export const removeKey = (k = "", { [k]:_, ...o }: Record<string, any> = {}) => 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const removeKeys = (keys: string[] = [], o: Record<string, any> = {}) => keys
   .reduce((r, k) => removeKey(k, r), o);
+
+export const getDataFromGoogle = (data: Record<string, string>): Omit<IUser, "id"> => ({
+  firstName: data.given_name,
+  lastName: data.family_name,
+  email: data.email,
+});
+  
+export const generateUniqueId = () => {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+};
+
+  

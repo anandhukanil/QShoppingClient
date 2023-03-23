@@ -48,10 +48,20 @@ export interface IProps {
 }
 
 const responsive = {
-  desktop: {
-    breakpoint: { max: 9000, min: 1024 },
+  desktop1: {
+    breakpoint: { max: 9000, min: 1830 },
     items: 5,
     slidesToSlide: 5 // optional, default to 1.
+  },
+  desktop2: {
+    breakpoint: { max: 1830, min: 1500 },
+    items: 4,
+    slidesToSlide: 4 // optional, default to 1.
+  },
+  desktop3: {
+    breakpoint: { max: 1500, min: 1024 },
+    items: 3,
+    slidesToSlide: 3 // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },

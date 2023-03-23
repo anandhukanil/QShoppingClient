@@ -1,7 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { routes } from "../routes/routes";
+import { IRoute } from "../types";
 import Layout from "./Layout";
+import ProtectedRoute from "./ProtectedRoute";
 
 
 const App: React.FC = () => {
@@ -10,33 +12,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         {(Object.keys(routes) as (keyof (typeof routes))[]).map((key) => (
-          routes[key].children?.length
-            ? (
-              <Route
-                key={routes[key].name}
-                path={routes[key].path}
-              >
-                <Route
-                  key={routes[key].name}
-                  path={routes[key].path}
-                  element={routes[key].element}
-                />
-                {routes[key].children.map((childRoute) => (
-                  <Route
-                    key={childRoute.name}
-                    path={childRoute.path}
-                    element={childRoute.element}
-                  />
-                ))}
-              </Route>
-            )
-            : (
-              <Route
-                key={routes[key].name}
-                path={routes[key].path}
-                element={routes[key].element}
-              />
-            )
+          getRouteElementWithChildren(routes[key])
         ))}
       </Route>
     </Routes>
@@ -44,3 +20,37 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+const getRouteElementWithChildren = (route: IRoute&{children: IRoute[], protected?: boolean}) => {
+
+  if (!route.children?.length) {
+    return (
+      <Route
+        key={route.name}
+        path={route.path}
+        element={route.element}
+      />
+    );
+  }
+
+  return (
+    <Route
+      key={route.name}
+      path={route.path}
+      element={route.protected ? <ProtectedRoute /> : undefined}
+    >
+      <Route
+        key={route.name}
+        path={route.path}
+        element={route.element}
+      />
+      {route.children.map((childRoute) => (
+        <Route
+          key={childRoute.name}
+          path={childRoute.path}
+          element={childRoute.element}
+        />
+      ))}
+    </Route>
+  );
+};

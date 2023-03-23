@@ -1,36 +1,34 @@
-import { call, takeEvery, put, takeLatest, all, takeLeading } from "redux-saga/effects";
-import { logIn, signUp } from "../../apis/users";
-import { IAction, IUser, Types } from "../../types";
+import { takeEvery, put, takeLatest, all, takeLeading } from "redux-saga/effects";
+import { IAction, Types } from "../../types";
 import {
   add_to_cart, add_to_wishlist, catch_exceptions, checkout_cart_items, remove_from_cart, remove_from_wishlist,
-  user_login, user_logout, user_signup
+  user_logout, set_current_user,
 } from "../actionsAndReducers/users";
 
 
-function* signupUser(action: IAction) {
+// function* addUser(action: IAction) {
+//   try {
+//     const user: IUser = yield call(() => signUp(action.payload as IUser));
+//     yield put(add_user(user));
+//   } catch (error) {
+//     yield put(catch_exceptions("Error while logging in!"));
+//   }
+// }
+
+// export function* addUserSaga() {
+//   yield takeLatest(Types.ADD_USER, addUser);
+// }
+
+function* setCurrentUser(action: IAction) {
   try {
-    const user: IUser = yield call(() => signUp(action.payload as IUser));
-    yield put(user_signup(user));
+    yield put(set_current_user(action.payload));
   } catch (error) {
     yield put(catch_exceptions("Error while logging in!"));
   }
 }
 
-export function* signUpUserSaga() {
-  yield takeLatest(Types.USER_SIGNUP, signupUser);
-}
-
-function* loginUser(action: IAction) {
-  try {
-    const user: IUser = yield call(() => logIn(action.payload as { username: string, password: string }));
-    yield user ? put(user_login(user)) : put(catch_exceptions("User not found"));
-  } catch (error) {
-    yield put(catch_exceptions("Error while logging in!"));
-  }
-}
-
-export function* loginUserSaga() {
-  yield takeLatest(Types.USER_LOGIN, loginUser);
+export function* setCurrentUserSaga() {
+  yield takeLatest(Types.SET_CURRENT_USER, setCurrentUser);
 }
 
 function* logoutUser() {
@@ -108,7 +106,7 @@ export function* checkoutCartItemsSaga() {
 
 export default function* userSaga() {
   yield all([
-    signUpUserSaga(), loginUserSaga(), logoutUserSaga(), addToCartSaga(), removeFromCartSaga(),
+    setCurrentUserSaga(), logoutUserSaga(), addToCartSaga(), removeFromCartSaga(),
     addToWishListSaga(), removeFromWishlistSaga(), checkoutCartItemsSaga(),
   ]);
 }

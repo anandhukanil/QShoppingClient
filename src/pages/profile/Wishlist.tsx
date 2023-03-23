@@ -15,7 +15,7 @@ const Wishlist: React.FC<IProps> = () => {
         image={wishlist}
         imageClassName={styles.wishlistImage}
         title="No Items In Wishlist!"
-        description="Continue shopping add some items to wishlist."
+        description="Continue shopping and add some items to wishlist."
       />
     );
   }

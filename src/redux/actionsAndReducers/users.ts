@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserState, SliceNames, Types } from "../../types";
-// const user = {
-//   id: 1,
-//   firstName: "Anandhu",
-//   lastName: "Anil",
-//   mobileNumber: 9656786915,
-//   email: "anandhukanil@gmail.com"
-// };
+
 const INITIAL_STATE: IUserState = {
   currentUser: undefined,
   cartItems: [],
@@ -18,14 +12,11 @@ const userSlice = createSlice({
   name: SliceNames.Users,
   initialState: INITIAL_STATE,
   reducers: {
-    [Types.USER_LOGIN]: (state, action) => {
+    [Types.SET_CURRENT_USER]: (state, action) => {
       return { ...state, currentUser : action.payload };
     },
     [Types.USER_LOGOUT]: (state) => {
       return { ...state, currentUser : undefined, cartItems: [], wishListItems: [] };
-    },
-    [Types.USER_SIGNUP]: (state, action) => {
-      return { ...state, currentUser : action.payload };
     },
     [Types.ADD_TO_CART]: (state, action) => {
       const cartItems = state.cartItems
@@ -65,7 +56,7 @@ const userSlice = createSlice({
 });
 
 export const { 
-  user_login, user_logout, user_signup, add_to_cart, add_to_wishlist, remove_from_cart,
+  set_current_user, user_logout, add_to_cart, add_to_wishlist, remove_from_cart,
   remove_from_wishlist, checkout_cart_items, catch_exceptions
 } = userSlice.actions;
 

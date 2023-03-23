@@ -22,7 +22,7 @@ export const loginFields: IFormField[] = [
 
 const confirmPasswordValidation: IFormField["customValidation"] = (values) => {
   const response = { success: true, error: ""};
-  if (!values?.confirmPassword || (values?.password !== values?.confirmPassword)) {
+  if (!values?.confirmPassword || (values?.createPassword !== values?.confirmPassword)) {
     response.success = false;
     response.error = "Password must be same";
   
@@ -48,7 +48,7 @@ export const signUpFields: IFormField[] = [
   },
   {
     fieldType: FieldTypes.Password,
-    name: "password",
+    name: "createPassword",
     placeholder: "Minimum 8 characters",
     label: "Create Password",
     required: true,
@@ -65,5 +65,34 @@ export const signUpFields: IFormField[] = [
     validationRules: { minLength: 8 },
     customValidation: confirmPasswordValidation,
     tooltip: "Please re-enter your password to confirm it. The passwords must match to proceed."
+  },
+];
+
+export const profileFields: IFormField[] = [
+  {
+    fieldType: FieldTypes.Text,
+    name: "firstName",
+    placeholder: "First Name",
+    label: "First Name",
+    required: true,
+    validationRules: { minLength: 4 },
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "lastName",
+    placeholder: "Last Name",
+    label: "Last Name",
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "mobileNumber",
+    placeholder: "+91 9876543210",
+    label: "Mobile Number",
+  },
+  {
+    fieldType: FieldTypes.Number,
+    name: "age",
+    placeholder: "21",
+    label: "Age",
   },
 ];

@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 
 const FormComponent: React.FC<PropsWithChildren<IProps>> = (props) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [values, setValues] = useState<Record<string, string>>(setInitialValues(props.fields));
+  const [values, setValues] = useState<Record<string, string>>(setInitialValues(props.fields, props.values));
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ const FormComponent: React.FC<PropsWithChildren<IProps>> = (props) => {
               type={field.fieldType}
               id={field.name}
               value={values[field.name]}
-              {...removeKeys(["fieldType", "customValidation", "validationRules"], field)}
+              {...removeKeys(["fieldType", "customValidation", "validationRules", "skipValidation"], field)}
               onChange={(e) => onChangeHandler(e, field.name)}
             />
             {field.tooltip && <span className={styles.tooltip} data-tooltip={field.tooltip}>i</span>}
@@ -61,6 +61,7 @@ export interface IProps {
   title: string;
   onSubmit: (values: Record<string, string>) => void;
   fields: IFormField[];
+  values?: Record<string, string>;
   description?: string;
   submitButtonText?: string;
   disableSubmit?: boolean;
@@ -119,6 +120,7 @@ const validateFields = (values: Record<string, string>, fields: IFormField[]) =>
   return result;
 };
 
-const setInitialValues = (fields: IFormField[]) => fields.reduce((prevValue, currentValue) => (
-  {...prevValue, [currentValue.name]: ""}
-), {}); 
+const setInitialValues = (fields: IFormField[], values?: Record<string, string>) => (fields
+  .reduce((prevValue, currentValue) => (
+    {...prevValue, [currentValue.name]: (values && values[currentValue.name] || "") }
+  ), {}));

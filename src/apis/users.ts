@@ -1,15 +1,37 @@
-import { IUser } from "../types";
+import { generateUniqueId } from "../helpers";
+import { IUser, IUserData } from "../types";
 
-// TODO Change logic
-export const logIn = (loginData: { username: string, password: string }) => {
-  const users: IUser[] = JSON.parse(localStorage.getItem("users") ?? "[]");
+export const getUsers = (): IUserData[] => {
+  const users: IUserData[] = JSON.parse(localStorage.getItem("users") ?? "[]");
   
-  return users.find((user) => loginData?.username === user.email && loginData.password === "password");
+  return users;
 };
 
-export const signUp = (data: IUser) => {
-  const users: IUser[] = JSON.parse(localStorage.getItem("users") ?? "[]");
-  localStorage.setItem("users", JSON.stringify([...users, { ...data, id: users.length + 1}]));
+export const getUser = (email: string): IUserData => {
+  const users: IUserData[] = getUsers();
+  
+  return users.find((user) => user.email === email) as IUserData;
+};
 
-  return { ...data, id: users.length+1 };
+export const addUser = (user:  Omit<IUserData, "id">): IUserData => {
+  const users: IUserData[] = getUsers();
+  const userData = { ...user, id: generateUniqueId() };
+  localStorage.setItem("users", JSON.stringify([...users, userData]));
+
+  return userData;
+};
+
+export const updateUser = (user: IUser) => {
+  const users = getUsers();
+  const _user = users.find((_user) => user.email === _user.email);
+  const userData: IUserData = {
+    ...(!!_user && _user),
+    ...user,
+    hash: _user?.hash as string,
+  };
+  localStorage.setItem("users", JSON.stringify(users.map(
+    (_data) => _data.id === userData.id ? userData : _data
+  )));
+
+  return userData;
 };

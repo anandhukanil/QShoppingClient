@@ -8,14 +8,14 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "Q-logo.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "97x97"
     },
     {
-      "src": "logo512.png",
+      "src": "QShopping-logo.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "201x147"
     }
   ],
   "start_url": ".",

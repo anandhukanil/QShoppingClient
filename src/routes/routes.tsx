@@ -37,6 +37,7 @@ export const routes: IRoutes = {
     path: "/profile",
     name: "profile",
     element: <Profile />,
+    protected: true,
     children: [
       {
         name: "wishlist",
