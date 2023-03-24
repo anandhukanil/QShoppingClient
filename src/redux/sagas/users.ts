@@ -1,23 +1,9 @@
 import { takeEvery, put, takeLatest, all, takeLeading } from "redux-saga/effects";
-import { IAction, Types } from "../../types";
+import { IAction, LocalData, Types } from "../../types";
 import {
   add_to_cart, add_to_wishlist, catch_exceptions, checkout_cart_items, remove_from_cart, remove_from_wishlist,
   user_logout, set_current_user,
 } from "../actionsAndReducers/users";
-
-
-// function* addUser(action: IAction) {
-//   try {
-//     const user: IUser = yield call(() => signUp(action.payload as IUser));
-//     yield put(add_user(user));
-//   } catch (error) {
-//     yield put(catch_exceptions("Error while logging in!"));
-//   }
-// }
-
-// export function* addUserSaga() {
-//   yield takeLatest(Types.ADD_USER, addUser);
-// }
 
 function* setCurrentUser(action: IAction) {
   try {
@@ -34,6 +20,7 @@ export function* setCurrentUserSaga() {
 function* logoutUser() {
   try {
     yield put(user_logout());
+    yield localStorage.removeItem(LocalData.LoggedInUserId);
   } catch (error) {
     yield put(catch_exceptions("Error while logging out!"));
   }

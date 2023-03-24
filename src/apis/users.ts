@@ -1,10 +1,16 @@
 import { generateUniqueId } from "../helpers";
-import { IUser, IUserData } from "../types";
+import { IUser, IUserData, LocalData } from "../types";
 
 export const getUsers = (): IUserData[] => {
-  const users: IUserData[] = JSON.parse(localStorage.getItem("users") ?? "[]");
+  const users: IUserData[] = JSON.parse(localStorage.getItem(LocalData.Users) ?? "[]");
   
   return users;
+};
+
+export const getUserById = (id: string) => {
+  const users: IUserData[] = getUsers();
+  
+  return users.find((user) => user.id === id) as IUserData;
 };
 
 export const getUser = (email: string): IUserData => {
@@ -16,7 +22,7 @@ export const getUser = (email: string): IUserData => {
 export const addUser = (user:  Omit<IUserData, "id">): IUserData => {
   const users: IUserData[] = getUsers();
   const userData = { ...user, id: generateUniqueId() };
-  localStorage.setItem("users", JSON.stringify([...users, userData]));
+  localStorage.setItem(LocalData.Users, JSON.stringify([...users, userData]));
 
   return userData;
 };
@@ -29,8 +35,8 @@ export const updateUser = (user: IUser) => {
     ...user,
     hash: _user?.hash as string,
   };
-  localStorage.setItem("users", JSON.stringify(users.map(
-    (_data) => _data.id === userData.id ? userData : _data
+  localStorage.setItem(LocalData.Users, JSON.stringify(users.map(
+    (_data) => _data.email === userData.email ? userData : _data
   )));
 
   return userData;

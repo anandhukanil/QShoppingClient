@@ -59,7 +59,8 @@
 
 .icon {
   font-size: 13px;
-  color: #91A5BE;
+  /* color: #91A5BE; */
+  margin-left: 5px;
   transform: rotate(0deg);
   transition: all .2s ease-in-out;
 }

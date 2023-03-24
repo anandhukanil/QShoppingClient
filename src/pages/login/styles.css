@@ -32,10 +32,33 @@ body {
   min-width: 320px;
 }
 
-.loginWrapper .logo svg {
+/* .loginWrapper .logo svg {
   height: 40px;
   width: 40px;
   fill: var(--primary);
+} */
+
+.loginWrapper .logo {
+  text-align: right;
+}
+.loginWrapper .logo > button {
+  background: white;
+  border: none;
+  font-size: 1rem;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+}
+.loginWrapper .logo > button:hover.right {
+  transform: translate3d(1rem, 0, 0);
+}
+.loginWrapper .logo > button:hover.left {
+  transform: translate3d(-1rem, 0, 0);
+}
+.loginWrapper .logo > button > svg {
+  margin: 0 5px;
+  vertical-align: text-top;
 }
 
 .loginWrapper .login-form {

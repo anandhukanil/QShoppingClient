@@ -6,7 +6,7 @@ import { signUpFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
 import "../styles.css";
 import { addUser, getUser } from "../../../apis/users";
-import { IUserData, NotificationTypes, Types } from "../../../types";
+import { IUserData, LocalData, NotificationTypes, Types } from "../../../types";
 import { routes } from "../../../routes/routes";
 
 const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {
@@ -35,6 +35,7 @@ const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {
       type: Types.SET_CURRENT_USER,
       payload: {...userValue, hash: ""}
     });
+    localStorage.setItem(LocalData.LoggedInUserId, userValue?.id);
     dispatch({
       type: Types.SET_NOTIFICATION,
       payload: { type: NotificationTypes.Success, message: "Sign Up Success!" }

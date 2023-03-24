@@ -26,7 +26,7 @@
   margin: auto;
 }
 .suggestionLabelText {
-  margin: 50px 0 -35px 15px;
+  margin: 50px 0 20px 15px;
 }
 
 /* Categories Component Styles */
@@ -52,10 +52,13 @@
 .categoryCardWrapper img {
   padding-right: 30px;
   height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 .categoryCardWrapper h3 {
   margin-top: 0;
   color: var(--titleText);
+  text-transform: capitalize;
 }
 .categoryLabel {
   text-align: center;

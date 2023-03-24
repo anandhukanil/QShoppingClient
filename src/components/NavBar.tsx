@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
                     label="Account"
                     labelComponent={LabelComponent}
                     menuItems={options}
-                    hideChevronIcon
+                    // hideChevronIcon
                   />
                 )
                 : (

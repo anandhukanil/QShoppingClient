@@ -33,11 +33,21 @@ export interface IProduct {
   // image: string;
   // rating: Rating;
 }
+
+export interface IAddress {
+  addressLine1: string;
+  city: string;
+  state: string;
+  pinCode: number;
+}
 export interface IUser {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  mobileNumber?: string;
+  age?: number;
+  address?: IAddress;
 }
 
 export interface IUserData extends IUser {
@@ -131,7 +141,7 @@ export interface IFormField {
   fieldType: FieldTypes;
   name: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value?: any;
+  [key: string]: any; value?: any;
   label?: string;
   placeholder?: string;
   required?: boolean;
@@ -143,4 +153,9 @@ export interface IFormField {
   customValidation?: (values: Record<string, string>, name: string) => ({success: boolean, error: string});
   tooltip?: string;
   skipValidation?: boolean;
+}
+
+export enum LocalData {
+  Users = "users",
+  LoggedInUserId = "loggedInUserId"
 }

@@ -68,6 +68,16 @@ export const signUpFields: IFormField[] = [
   },
 ];
 
+const mobileNumberValidation: IFormField["customValidation"] = (values) => {
+  const response = { success: true, error: ""};
+  if (values?.mobileNumber && !values?.mobileNumber?.match(/^(\+\d{1,3}[- ]?)?\d{10}$/)) {
+    response.success = false;
+    response.error = "Mobile number is invalid";
+  
+  }
+  return response;
+};
+
 export const profileFields: IFormField[] = [
   {
     fieldType: FieldTypes.Text,
@@ -88,11 +98,45 @@ export const profileFields: IFormField[] = [
     name: "mobileNumber",
     placeholder: "+91 9876543210",
     label: "Mobile Number",
+    customValidation: mobileNumberValidation,
   },
   {
     fieldType: FieldTypes.Number,
     name: "age",
     placeholder: "21",
     label: "Age",
+    min: 18,
+  },
+];
+
+export const addressFields: IFormField[] = [
+  {
+    fieldType: FieldTypes.Text,
+    name: "addressLine1",
+    label: "Address Line 1",
+    required: true,
+    validationRules: { minLength: 4 },
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "city",
+    label: "City",
+    required: true,
+    validationRules: { minLength: 2 }
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "state",
+    label: "State",
+    required: true,
+    validationRules: { minLength: 2 }
+  },
+  {
+    fieldType: FieldTypes.Number,
+    name: "pinCode",
+    label: "Pin Code",
+    min: 0,
+    required: true,
+    validationRules: { minLength: 5 }
   },
 ];

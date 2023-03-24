@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import bcrypt from "bcryptjs";
 import { loginFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
-import { NotificationTypes, Types } from "../../../types";
+import { LocalData, NotificationTypes, Types } from "../../../types";
 import { addUser, getUser } from "../../../apis/users";
 import { getDataFromGoogle } from "../../../helpers";
 import "../styles.css";
@@ -42,6 +42,7 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
           type: Types.SET_CURRENT_USER,
           payload: user
         });
+        localStorage.setItem(LocalData.LoggedInUserId, user?.id);
         dispatch({
           type: Types.SET_NOTIFICATION,
           payload: { type: NotificationTypes.Success, message: "Login Success!" }
@@ -78,6 +79,7 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
         type: Types.SET_CURRENT_USER,
         payload: {...user, hash: ""}
       });
+      localStorage.setItem(LocalData.LoggedInUserId, user?.id);
       dispatch({
         type: Types.SET_NOTIFICATION,
         payload: { type: NotificationTypes.Success, message: "Login Success!" }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { notFound } from "../../assets";
@@ -20,9 +20,15 @@ const ProductListing: React.FC<IProps> = () => {
     });
   }, [search]);
 
+  const productsData = useMemo(() => search.get("category")
+    ? products.filter((product) => product.category === search.get("category"))
+    : products
+  ,[products, search]);
+
   return (
     <div className={styles.productListPageWrapper}>
       {!!search.get("search") && <h3>Showing results for &quot;{search.get("search")}&quot;...</h3>}
+      {!!search.get("category") && <h3 style={categoryStyles}>{search.get("category")?.replace(/-/g, " ")}</h3>}
       {dataLoading
         ? (
           <div className={styles.productListLoadingWrapper}>
@@ -30,10 +36,10 @@ const ProductListing: React.FC<IProps> = () => {
           </div>
         )
         : (
-          products?.length
+          productsData?.length
             ? (
               <div className={styles.productListItemsContainer}>
-                {products?.map((item) => (
+                {productsData?.map((item) => (
                   <ProductCard
                     key={item.id}
                     product={item}
@@ -57,3 +63,7 @@ const ProductListing: React.FC<IProps> = () => {
 export default ProductListing;
 
 export interface IProps {}
+
+const categoryStyles: React.CSSProperties = {
+  textTransform: "capitalize",
+};
