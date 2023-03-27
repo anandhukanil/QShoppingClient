@@ -113,7 +113,8 @@
   background: var(--red);
   width: 14px;
   height: 14px;
-  line-height: 15px;
+  line-height: 12px;
+  font-weight: 600;
   display: block;
   text-align: center;
   color: white;
