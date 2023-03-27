@@ -1,5 +1,5 @@
 {
-  "name": "shopping-app",
+  "name": "shopping-app-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -38,6 +38,15 @@
       "react-app/jest"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anandhukanil/QShoppingClient.git"
+  },
+  "author": "Anandhu K Anil",
+  "bugs": {
+    "url": "https://github.com/anandhukanil/QShoppingClient/issues"
+  },
+  "homepage": "https://github.com/anandhukanil/QShoppingClient#readme",
   "browserslist": {
     "production": [
       ">0.2%",
