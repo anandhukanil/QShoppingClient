@@ -14,7 +14,6 @@ const Layout: React.FC<IProps> = () => {
     const localLoggedInUser = localStorage.getItem(LocalData.LoggedInUserId);
     if (localLoggedInUser) {
       const loggedInUser = getUserById(localLoggedInUser);
-      console.log("🚀 ~ file: Layout.tsx:17 ~ useEffect ~ loggedInUser:", loggedInUser);
       if (!loggedInUser) return;
       dispatch({
         type: Types.SET_CURRENT_USER,

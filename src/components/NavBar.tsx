@@ -1,8 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { FaBars, FaShoppingCart, FaSignInAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { FaBoxOpen, FaHeart, FaSignOutAlt, FaUser, FaUserCog } from "react-icons/fa";
+import {
+  FaBoxOpen, FaHeart, FaSignOutAlt, FaUser, FaUserCog,
+  FaBars, FaShoppingCart, FaSignInAlt
+} from "react-icons/fa";
 import { IMenuItem, IState, Types } from "../types";
 import {routes} from "../routes/routes";
 import styles from "./styles.module.css";

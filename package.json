@@ -46,7 +46,6 @@
   "bugs": {
     "url": "https://github.com/anandhukanil/QShoppingClient/issues"
   },
-  "homepage": "https://github.com/anandhukanil/QShoppingClient#readme",
   "browserslist": {
     "production": [
       ">0.2%",

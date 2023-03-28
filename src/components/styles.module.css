@@ -810,11 +810,28 @@ nav + .carousel {
 }
 .errorPageWrapper {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
   overflow: hidden;
+}
+.errorPageWrapper img {
+  width: 50%;
+  height: 50%;
+  max-width: 150px;
+}
+.errorPageWrapper > div {
+  text-align: center;
+}
+.errorPageWrapper > div h1 {
+  color: var(--titleText);
+  font-size: 1.2rem;
+}
+.errorPageWrapper > div p {
+  color: var(--paragraphText);
+  font-size: 0.8rem;
 }
 .errorFullPageWrapper img {
   width: 50vw;

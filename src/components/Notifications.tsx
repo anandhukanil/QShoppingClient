@@ -17,7 +17,7 @@ const Notifications: React.FC<IProps> = () => {
         handleClose();
       }, 5000);
     }
-    return () => { timer && clearTimeout(timer); };
+    return () => { if (timer) clearTimeout(timer); };
   }, [message]);
 
   const handleClose = () => {

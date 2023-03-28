@@ -36,6 +36,12 @@
             "error",
             "always"
         ],
+        "no-duplicate-imports": "error",
+        "no-unused-expressions": "warn",
+        "no-console": [
+            "error",
+            { "allow": ["error"] }
+        ],
         "@typescript-eslint/no-empty-interface": "off"
     }
 }

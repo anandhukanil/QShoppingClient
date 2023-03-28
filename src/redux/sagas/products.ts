@@ -16,7 +16,7 @@ function* getAllProducts(action: IAction) {
     const response: AxiosResponse<{products: IProduct[]}, unknown> = yield call(() => (
       action?.payload ? searchProductsApi(action.payload as string) : allProductsApi()
     ));
-    yield put(get_all_products(response.data?.products));
+    yield put(get_all_products(response.data));
     yield put(set_data_loading(false));
   } catch (error) {
     yield put(catch_exceptions("Error while fetching products!"));

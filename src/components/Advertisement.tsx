@@ -1,18 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { getProduct } from "../apis/products";
+import { warning } from "../assets";
 import { IProduct } from "../types";
+import ErrorPage from "./ErrorPage";
 import LoadingComponent from "./LoadingComponent";
 import styles from "./styles.module.css";
 
 const Advertisement: React.FC<IProps> = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<IProduct>();
 
   useEffect(() => {
     (async () => {
-      const data = await getProduct(Math.floor((Math.random() * 20) + 1));
-      setProduct(data?.data);
+      try {
+        setLoading(true);
+        const data = await getProduct(Math.floor((Math.random() * 20) + 1));
+        setProduct(data?.data);
+      } catch (err) {
+        setLoading(false);
+      }
     })();
   }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.adWrapper}>
+        <LoadingComponent />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.adWrapper}>
@@ -28,7 +44,14 @@ const Advertisement: React.FC<IProps> = () => {
             <img src={product.images[0]} />
           </>
         )
-        : <LoadingComponent />
+        : (
+          <ErrorPage
+            disableFullPage
+            title="Something went wrong"
+            image={warning}
+            description="Failed to load data! Please reload the browser."
+          />
+        )
       }
     </div>
   );

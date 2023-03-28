@@ -11,7 +11,7 @@ const CarouselComponent: React.FC<IProps> = ({images, disableAutoSwitch}) => {
       timer = setInterval(() => handleNextClick(), 2500);
     }
 
-    return () => { timer && clearInterval(timer); };
+    return () => { if (timer) clearInterval(timer); };
   }, [disableAutoSwitch]);
   
   const handlePrevClick = () => {

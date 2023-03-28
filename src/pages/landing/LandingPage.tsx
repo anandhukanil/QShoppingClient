@@ -10,7 +10,7 @@ import { banners } from "../../assets";
 import AdWrapperComponent from "./components/AdHolderComponent";
 
 const LandingPage: React.FC<IProps> = () => {
-  const { products } = useSelector((state: IState) => state.products);
+  const { products, dataLoading } = useSelector((state: IState) => state.products);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,10 +28,10 @@ const LandingPage: React.FC<IProps> = () => {
       <Categories />
       <Banner />
       <h2 style={labelStyles}>Most Popular Products</h2>
-      <HorizontalProductListing products={popularProducts}/>
+      <HorizontalProductListing products={popularProducts} loading={dataLoading} />
       <AdWrapperComponent />
       <h2 style={labelStyles}>Recently Viewed</h2>
-      <HorizontalProductListing products={recentProducts}/>
+      <HorizontalProductListing products={recentProducts} loading={dataLoading} />
     </div>
   );
 };

@@ -11,5 +11,5 @@ export const getProduct = (productId: number) => (
 );
 
 export const searchProducts = (query: string) => (
-  axios.get(`/products/search?q=${query}`)
+  axios.get(`/products/search?query=${query}`)
 );

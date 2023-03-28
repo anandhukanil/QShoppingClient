@@ -4,9 +4,21 @@ import "react-multi-carousel/lib/styles.css";
 import { IProduct } from "../../../types";
 import LoadingComponent from "../../../components/LoadingComponent";
 import ProductCard from "../../../components/ProductCard";
+import ErrorPage from "../../../components/ErrorPage";
+import { warning } from "../../../assets";
 
 
-const HorizontalProductListing: React.FC<IProps> = ({products}) => {
+const HorizontalProductListing: React.FC<IProps> = ({products, loading}) => {
+
+  if (loading) {
+    return (
+      <div>
+        <div style={{ margin: "4em" }}>
+          <LoadingComponent />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -32,9 +44,12 @@ const HorizontalProductListing: React.FC<IProps> = ({products}) => {
           </Carousel>
         )
         : (
-          <div style={{ margin: "4em" }}>
-            <LoadingComponent />
-          </div>
+          <ErrorPage
+            disableFullPage
+            title="Something went wrong"
+            image={warning}
+            description="Failed to load data! Please reload the browser."
+          />
         )
       }
     </div>
@@ -45,6 +60,7 @@ export default HorizontalProductListing;
 
 export interface IProps {
   products: IProduct[];
+  loading: boolean;
 }
 
 const responsive = {
