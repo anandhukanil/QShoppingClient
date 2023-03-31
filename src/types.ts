@@ -63,6 +63,7 @@ export enum Types {
   // User Actions
   SET_CURRENT_USER = "set_current_user",
   USER_LOGOUT = "user_logout",
+  USER_LOGIN = "user_login",
   ADD_TO_CART = "add_to_cart",
   REMOVE_FROM_CART = "remove_from_cart",
   ADD_TO_WISHLIST = "add_to_wishlist",
@@ -72,6 +73,8 @@ export enum Types {
   //Notification Actions
   SET_NOTIFICATION = "set_notification",
   CLEAR_NOTIFICATION = "clear_notification",
+
+  TOKEN_REFRESH = "token_refresh",
 
   CATCH_EXCEPTIONS = "catch_exceptions",
 }
@@ -104,6 +107,8 @@ export interface IProductState {
 
 export interface IUserState {
   currentUser: IUser|undefined;
+  refreshToken: string;
+  accessToken: string;
   cartItems: { item: IProduct, count: number }[];
   wishListItems: IProduct[];
   error: string;
@@ -156,6 +161,5 @@ export interface IFormField {
 }
 
 export enum LocalData {
-  Users = "users",
-  LoggedInUserId = "loggedInUserId"
+  RefreshToken = "rfToken"
 }

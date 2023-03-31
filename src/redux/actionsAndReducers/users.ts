@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserState, SliceNames, Types } from "../../types";
+import { IUserState, LocalData, SliceNames, Types } from "../../types";
 
 const INITIAL_STATE: IUserState = {
   currentUser: undefined,
+  refreshToken: localStorage.getItem(LocalData.RefreshToken) as string,
+  accessToken: "",
   cartItems: [],
   wishListItems: [],
   error: ""
@@ -16,7 +18,29 @@ const userSlice = createSlice({
       return { ...state, currentUser : action.payload };
     },
     [Types.USER_LOGOUT]: (state) => {
-      return { ...state, currentUser : undefined, cartItems: [], wishListItems: [] };
+      return { 
+        ...state, 
+        currentUser : undefined, 
+        cartItems: [], 
+        wishListItems: [],
+        accessToken: "",
+        refreshToken: "" 
+      };
+    },
+    [Types.USER_LOGIN]: (state, action) => {
+      return {
+        ...state,
+        currentUser: action.payload?.user,
+        accessToken: action.payload?.accessToken,
+        refreshToken: action.payload?.refreshToken
+      };
+    },
+    [Types.TOKEN_REFRESH]: (state, action) => {
+      return {
+        ...state,
+        accessToken: action.payload?.accessToken,
+        refreshToken: action.payload?.refreshToken,
+      };
     },
     [Types.ADD_TO_CART]: (state, action) => {
       const cartItems = state.cartItems
@@ -56,8 +80,9 @@ const userSlice = createSlice({
 });
 
 export const { 
-  set_current_user, user_logout, add_to_cart, add_to_wishlist, remove_from_cart,
-  remove_from_wishlist, checkout_cart_items, catch_exceptions
+  user_login, user_logout, add_to_cart, add_to_wishlist, remove_from_cart,
+  remove_from_wishlist, checkout_cart_items, set_current_user, catch_exceptions,
+  token_refresh,
 } = userSlice.actions;
 
 export default userSlice.reducer;

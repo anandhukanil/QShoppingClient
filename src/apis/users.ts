@@ -1,43 +1,65 @@
-import { generateUniqueId } from "../helpers";
-import { IUser, IUserData, LocalData } from "../types";
+import axios from "axios";
+import { IProduct, IUser } from "../types";
 
-export const getUsers = (): IUserData[] => {
-  const users: IUserData[] = JSON.parse(localStorage.getItem(LocalData.Users) ?? "[]");
-  
-  return users;
-};
 
-export const getUserById = (id: string) => {
-  const users: IUserData[] = getUsers();
-  
-  return users.find((user) => user.id === id) as IUserData;
-};
+export const logOut = (user: IUser, token: string) => (
+  axios.post("/auth/logout", {
+    user,
+    token
+  })
+);
 
-export const getUser = (email: string): IUserData => {
-  const users: IUserData[] = getUsers();
-  
-  return users.find((user) => user.email === email) as IUserData;
-};
+export const login = (username: string, password: string) => (
+  axios.post("/auth/login", {
+    username,
+    password
+  })
+);
 
-export const addUser = (user:  Omit<IUserData, "id">): IUserData => {
-  const users: IUserData[] = getUsers();
-  const userData = { ...user, id: generateUniqueId() };
-  localStorage.setItem(LocalData.Users, JSON.stringify([...users, userData]));
+export const refreshToken = (token: string) => (
+  axios.post("/auth/refresh", {
+    refreshToken: token
+  })
+);
 
-  return userData;
-};
+export const signup = (userData: IUser & {password: string}) => (
+  axios.post("/auth/signup", {
+    userData,
+  })
+);
 
-export const updateUser = (user: IUser) => {
-  const users = getUsers();
-  const _user = users.find((_user) => user.email === _user.email);
-  const userData: IUserData = {
-    ...(!!_user && _user),
-    ...user,
-    hash: _user?.hash as string,
-  };
-  localStorage.setItem(LocalData.Users, JSON.stringify(users.map(
-    (_data) => _data.email === userData.email ? userData : _data
-  )));
+export const updateUser = (data: IUser, id: string) => (
+  axios.post("/users/update", {
+    ...data,
+    id,
+  })
+);
 
-  return userData;
-};
+export const checkoutOrder = (data: {item: IProduct, count: number }[], id: string) => (
+  axios.post("/users/checkout", {
+    items: data,
+    id,
+  })
+);
+
+export const addToUserCart = (data: {item: IProduct, count: number }, id: string) => (
+  axios.post("/users/add-to-cart", {
+    item: data,
+    id,
+  })
+);
+
+export const removeFromUserCart = (data: {item: IProduct, count: number }, id: string) => (
+  axios.post("/users/remove-from-cart", {
+    item: data,
+    id,
+  })
+);
+
+export const updateUserCart = (itemId: number, count: number, id: string) => (
+  axios.post("/users/update-cart", {
+    itemId,
+    count,
+    id,
+  })
+);

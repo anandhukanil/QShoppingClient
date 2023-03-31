@@ -127,6 +127,9 @@
 .cartRightWrapper > div button:hover {
   background-color: #f1f1f1;
 }
+.cartRightWrapper > div button:disabled {
+  cursor: not-allowed;
+}
 .cartRightWrapper > svg {
   font-size: 20px;
   margin-left: 30px;
@@ -179,7 +182,27 @@
   color: white;
   border-radius: 30px;
   padding: 20px 40px;
+  margin-bottom: 20px;
 }
 .cartWrapper div.cartButtonWrapper button:hover {
   background-color: var(--primaryDark);
+}
+.cartWrapper div.cartButtonWrapper button:disabled {
+  cursor: not-allowed;
+  background-color: var(--paragraphText);
+  border-color: var(--paragraphText);
+}
+.cartWrapper div.cartButtonWrapper button:disabled:hover {
+  background-color: var(--paragraphText);
+}
+.addressDataWrapper {
+  margin: -15px 20px 20px 20px;
+  font-weight: 600;
+}
+.disabledCartCloseButtonStyles {
+  color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))!important;
+  cursor: not-allowed!important;
+}
+.disabledCartCloseButtonStyles:hover {
+  color: var(--paragraphText)!important;
 }

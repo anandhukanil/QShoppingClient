@@ -21,31 +21,48 @@ const Profile: React.FC = () => {
     setActive((prevState) => !prevState);
   };
 
-  const onProfileUpdate = useCallback((values: Record<string, string>) => {
+  const onProfileUpdate = useCallback(async (values: Record<string, string>) => {
     setLoading(true);
-    const userData = updateUser({...values, email: currentUser?.email} as IUser);
-    dispatch({
-      type: Types.SET_CURRENT_USER,
-      payload: {...userData, hash: ""}
-    });
-    dispatch({
-      type: Types.SET_NOTIFICATION,
-      payload: { type: NotificationTypes.Success, message: "Profile Updated!" }
-    });
+    try {
+      const response = await updateUser(values as unknown as IUser, currentUser?.id as string);
+      dispatch({
+        type: Types.SET_CURRENT_USER,
+        payload: response.data
+      });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Profile Updated!" }
+      });
+    } catch (error) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Failed To Update Profile!" }
+      });
+    }
     setLoading(false);
   }, [currentUser]);
 
-  const onAddressUpdate = useCallback((values: Record<string, string>) => {
+  const onAddressUpdate = useCallback(async (values: Record<string, string>) => {
     setLoading(true);
-    const userData = updateUser({...currentUser, address: values as unknown as IAddress } as IUser);
-    dispatch({
-      type: Types.SET_CURRENT_USER,
-      payload: {...userData, hash: ""}
-    });
-    dispatch({
-      type: Types.SET_NOTIFICATION,
-      payload: { type: NotificationTypes.Success, message: "Address Updated!" }
-    });
+    try {
+      const response = await updateUser(
+      { address: values as unknown as IAddress } as IUser,
+      currentUser?.id as string
+      );
+      dispatch({
+        type: Types.SET_CURRENT_USER,
+        payload: response.data
+      });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Address Updated!" }
+      });
+    } catch (error) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Failed To Update Address!" }
+      });
+    }
     setLoading(false);
   }, [currentUser]);
 

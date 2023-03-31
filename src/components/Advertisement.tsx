@@ -16,6 +16,7 @@ const Advertisement: React.FC<IProps> = () => {
         setLoading(true);
         const data = await getProduct(Math.floor((Math.random() * 20) + 1));
         setProduct(data?.data);
+        setLoading(false);
       } catch (err) {
         setLoading(false);
       }

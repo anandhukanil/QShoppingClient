@@ -14,12 +14,15 @@ import DropdownMenu from "./DropdownMenu";
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
-  const { cartItems, currentUser } = useSelector((state: IState) => state.users);
+  const { cartItems, currentUser, refreshToken } = useSelector((state: IState) => state.users);
 
 
   const onSignOut = useCallback(() => {
-    dispatch({ type: Types.USER_LOGOUT });
-  }, [dispatch]);
+    dispatch({
+      type: Types.USER_LOGOUT,
+      payload: { user: currentUser, token: refreshToken }
+    });
+  }, [dispatch, currentUser, refreshToken]);
 
   const options: IMenuItem[] = useMemo(() => [
     {

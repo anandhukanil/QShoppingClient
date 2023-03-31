@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
-import bcrypt from "bcryptjs";
 import { loginFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
-import { LocalData, NotificationTypes, Types } from "../../../types";
-import { addUser, getUser } from "../../../apis/users";
+import { NotificationTypes, Types } from "../../../types";
 import { getDataFromGoogle } from "../../../helpers";
 import "../styles.css";
+import { login } from "../../../apis/users";
 
 const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
   const [buttonWidth, setButtonWidth] = useState<number>(380);
@@ -33,16 +32,16 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
     fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${response?.credential}`)
       .then((res) => res.json())
       .then((data) => {
-        const userData = getDataFromGoogle(data);
-        let user = getUser(userData?.email);
-        if (!user) {
-          user = addUser({ ...userData, hash: "" });
-        }
-        dispatch({
-          type: Types.SET_CURRENT_USER,
-          payload: user
-        });
-        localStorage.setItem(LocalData.LoggedInUserId, user?.id);
+        getDataFromGoogle(data);
+        // let user = getUser(userData?.email);
+        // if (!user) {
+        //   user = addUser({ ...userData, hash: "" });
+        // }
+        // dispatch({
+        //   type: Types.SET_CURRENT_USER,
+        //   payload: user
+        // });
+        // localStorage.setItem(LocalData.LoggedInUserId, user?.id);
         dispatch({
           type: Types.SET_NOTIFICATION,
           payload: { type: NotificationTypes.Success, message: "Login Success!" }
@@ -65,29 +64,27 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
     });
   };
 
-  const onSignIn = (values: Record<string, string>) => {
+  const onSignIn = async (values: Record<string, string>) => {
     setLoading(true);
+    setErrorMessage("");
     const { username, password } = values;
-    const user = getUser(username);
-    if (!user) {
-      setErrorMessage("User not found!");
-      setLoading(false);
-      return;
-    }
-    if (bcrypt.compareSync(password, user.hash)) {
+    try {
+      const response = await login(username, password);
+      const { accessToken, refreshToken, user } = response.data;
       dispatch({
-        type: Types.SET_CURRENT_USER,
-        payload: {...user, hash: ""}
+        type: Types.USER_LOGIN,
+        payload: { accessToken, refreshToken, user }
       });
-      localStorage.setItem(LocalData.LoggedInUserId, user?.id);
       dispatch({
         type: Types.SET_NOTIFICATION,
         payload: { type: NotificationTypes.Success, message: "Login Success!" }
       });
       setLoading(false);
       onLoginCompleted();
-    } else {
-      setErrorMessage("Password is incorrect!");
+    } catch (error) {
+      if (error?.response?.data) {
+        setErrorMessage(error.response.data);
+      }
       dispatch({
         type: Types.SET_NOTIFICATION,
         payload: { type: NotificationTypes.Error, message: "Login Failed!" }

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import bcrypt from "bcryptjs";
 import { signUpFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
 import "../styles.css";
-import { addUser, getUser } from "../../../apis/users";
-import { IUserData, LocalData, NotificationTypes, Types } from "../../../types";
+import { signup } from "../../../apis/users";
+import { IUser, NotificationTypes, Types } from "../../../types";
 import { routes } from "../../../routes/routes";
 
 const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {
@@ -15,33 +14,31 @@ const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSignUp = (values: Record<string, string>) => {
+  const onSignUp = async (values: Record<string, string>) => {
     setLoading(true);
-    const user = getUser(values?.email);
-    if (user) {
-      setErrorMessage("Email already exists!");
+    try {
+      const response = await signup(values as unknown as (IUser&{password: string}));
+      const { accessToken, refreshToken, user } = response.data;
+      dispatch({
+        type: Types.USER_LOGIN,
+        payload: { accessToken, refreshToken, user }
+      });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Sign Up Success!" }
+      });
+      navigate(routes.landing.path);
       setLoading(false);
-      return;
+    } catch (error) {
+      if (error?.message === "User already exists") {
+        setErrorMessage("Email already exists!");
+      }
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Sign Up Failed!" }
+      });
     }
-    const hash = bcrypt.hashSync(values?.createPassword, 10);
-    const userData: Omit<IUserData, "id"> = {
-      email: values?.email,
-      firstName: values?.fullName?.split(" ")[0],
-      lastName: values?.fullName?.split(" ").slice(1).join(" "),
-      hash,
-    };
-    const userValue = addUser(userData);
-    dispatch({
-      type: Types.SET_CURRENT_USER,
-      payload: {...userValue, hash: ""}
-    });
-    localStorage.setItem(LocalData.LoggedInUserId, userValue?.id);
-    dispatch({
-      type: Types.SET_NOTIFICATION,
-      payload: { type: NotificationTypes.Success, message: "Sign Up Success!" }
-    });
     setLoading(false);
-    navigate(routes.landing.path);
   };
 
 

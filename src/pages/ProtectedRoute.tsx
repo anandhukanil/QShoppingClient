@@ -7,10 +7,9 @@ import { IState, LocalData } from "../types";
 const ProtectedRoute: React.FC<IProps> = () => {
   const { currentUser } = useSelector((state: IState) => state.users);
   const location = useLocation();
-  const loggedInUserId = localStorage.getItem(LocalData.LoggedInUserId);
+  const token = localStorage.getItem(LocalData.RefreshToken);
 
-
-  if (!currentUser && !loggedInUserId) {
+  if (!currentUser && !token) {
     return <Navigate to={routes.login.path} state={{ from: location }} />;
   }
 

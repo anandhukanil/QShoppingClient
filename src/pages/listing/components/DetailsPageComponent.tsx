@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCreditCard, FaMinus, FaPlus, FaShippingFast, FaShoppingBag } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,6 +49,8 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
     navigate(routes.cart.path);
   };
 
+  const outOfStock = useMemo(() => product?.stock < 1, [product]);
+
 
   if (dataLoading) {
     return (
@@ -84,7 +86,7 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
               <span>{product?.discountPercentage}% off</span>
             </div>
             <div className={styles.purchaseInfo}>
-              <div>
+              {(product?.stock >= 1) && (<div>
                 <button onClick={() => setItemCount((prev) => prev-1)} disabled={itemCount === 1}>
                   <FaMinus />
                 </button>
@@ -92,15 +94,26 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
                 <button onClick={() => setItemCount((prev) => prev+1)}disabled={itemCount === product?.stock}>
                   <FaPlus />
                 </button>
-              </div>
-              {product?.stock < 100 && (
+              </div>)}
+              {(product?.stock < 100) && (
+                outOfStock
+                  ? (
+                    <p className={styles.outOfStockLabelStyles}>Out of Stock</p>
+                  )
+                  : (
+                    <>
+                      <p>Only <span>{product?.stock}</span> items left!<br/>Don&apos;t miss it.</p>
+                    </>
+                  )
+              )
+              }
+              <br />
+              {!outOfStock && (
                 <>
-                  <p>Only <span>{product?.stock}</span> items left!<br/>Don&apos;t miss it.</p>
+                  <button onClick={onBuyNowClick} className={styles.primaryButton}>Buy Now</button>
+                  <button onClick={onAddToCartClick}>Add to Cart</button>
                 </>
               )}
-              <br />
-              <button onClick={onBuyNowClick} className={styles.primaryButton}>Buy Now</button>
-              <button onClick={onAddToCartClick}>Add to Cart</button>
             </div>
             <div className={styles.productOfferWrapper}>
               <div className={styles.productOffer}>

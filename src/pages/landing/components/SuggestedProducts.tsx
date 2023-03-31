@@ -25,7 +25,7 @@ const SuggestedProducts: React.FC<IProps> = () => {
       <h2 className={styles.suggestionLabelText}>Suggested For You!</h2>
       {products?.length ? (
         <div className={styles.productCardWrapper}>
-          {products.slice(0,10).map((item) => (
+          {[...products].sort(() => 0.5 - Math.random()).slice(0,10).map((item) => (
             <ProductCard key={item.id} product={item} />
           ))}
         </div>
