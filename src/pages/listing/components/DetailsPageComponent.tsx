@@ -9,25 +9,36 @@ import styles from "../styles.module.css";
 import { formatCurrency, getActualPrice } from "../../../helpers";
 import { routes } from "../../../routes/routes";
 import LoadingComponent from "../../../components/LoadingComponent";
+import { wishlistItem } from "../../../apis/users";
 
 const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
+  const [loading, setLoading] = useState<boolean>();
   const [itemCount, setItemCount] = useState<number>(1);
-  const { users: {wishListItems, cartItems}, products: {dataLoading} } = useSelector((state: IState) => state);
+  const { users: {currentUser, cartItems}, products: {dataLoading} } = useSelector((state: IState) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const wishListed = wishListItems?.some((item) => item.id === product?.id);
+  const wishListed = currentUser?.wishlistItems?.some((item) => item.id === product?.id);
 
-  const onWishlistClick = () => {
-    if (wishListed) {
-      dispatch({ type: Types.REMOVE_FROM_WISHLIST, payload: product });
-    } else {
-      dispatch({ type: Types.ADD_TO_WISHLIST, payload: product });
+  const onWishlistClick = async () => {
+    setLoading(true);
+    try {
+      const response = await wishlistItem(product, currentUser?.id as string, (wishListed ? "remove" : "add"));
+      dispatch({
+        type: Types.SET_CURRENT_USER,
+        payload: response?.data,
+      });
       dispatch({
         type: Types.SET_NOTIFICATION,
         payload: { type: NotificationTypes.Success, message: "Item added to Wishlist!" }
       });
+    } catch (error) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Failed to add to Wishlist!" }
+      });
     }
+    setLoading(false);
   };
 
   const onAddToCartClick = () => {
@@ -68,6 +79,7 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
             images={product?.images}
             onWishlistClick={onWishlistClick}
             wishListed={wishListed}
+            loading={loading}
           />
           <div className={styles.productContent}>
             <h2 className={styles.productTitle}>{product?.title}</h2>

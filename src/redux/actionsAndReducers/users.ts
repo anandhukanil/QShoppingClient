@@ -6,7 +6,6 @@ const INITIAL_STATE: IUserState = {
   refreshToken: localStorage.getItem(LocalData.RefreshToken) as string,
   accessToken: "",
   cartItems: [],
-  wishListItems: [],
   error: ""
 };
 
@@ -63,13 +62,6 @@ const userSlice = createSlice({
         ).filter((product) => product.count > 0);
       return { ...state, cartItems };
     },
-    [Types.ADD_TO_WISHLIST]: (state, action) => {
-      return { ...state, wishListItems : [...state.wishListItems, action.payload] };
-    },
-    [Types.REMOVE_FROM_WISHLIST]: (state, action) => {
-      const wishListItems = state.wishListItems.filter((item) => item.id !== action.payload?.id);
-      return { ...state, wishListItems };
-    },
     [Types.CHECKOUT_CART_ITEMS] : (state) => {
       return { ...state, cartItems: [] };
     },
@@ -80,8 +72,8 @@ const userSlice = createSlice({
 });
 
 export const { 
-  user_login, user_logout, add_to_cart, add_to_wishlist, remove_from_cart,
-  remove_from_wishlist, checkout_cart_items, set_current_user, catch_exceptions,
+  user_login, user_logout, add_to_cart, remove_from_cart,
+  checkout_cart_items, set_current_user, catch_exceptions,
   token_refresh,
 } = userSlice.actions;
 

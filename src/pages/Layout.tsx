@@ -24,6 +24,7 @@ const Layout: React.FC<IProps> = () => {
             payload: { accessToken, refreshToken: newToken, user }
           });
         } catch (error) {
+          console.error(error);
           dispatch({
             type: Types.SET_NOTIFICATION,
             payload: { type: NotificationTypes.Info, message: "Session expired! Please login" }
@@ -40,6 +41,36 @@ const Layout: React.FC<IProps> = () => {
       axios.defaults.headers.common["Authorization"] = null;
     }
   }, [accessToken]);
+
+  useEffect(() => {
+    axios.interceptors.response.use((response) => response, async (error) => {
+      const prevRequest = error.config;
+      if (error.response.status === 403 && !prevRequest._retry) {
+        const token = localStorage.getItem(LocalData.RefreshToken);
+        if (token) {
+          prevRequest._retry = true;
+          try {
+            const response = await refreshToken(token);
+            const { accessToken, refreshToken: newToken, user } = response.data;
+            dispatch({
+              type: Types.USER_LOGIN,
+              payload: { accessToken, refreshToken: newToken, user }
+            });
+            prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+            return axios(prevRequest);
+          } catch (error) {
+            console.error(error);
+            dispatch({
+              type: Types.SET_NOTIFICATION,
+              payload: { type: NotificationTypes.Info, message: "Session expired! Please login" }
+            });
+          }
+        }
+      }
+      return Promise.reject(error);
+    }
+    );
+  }, []);
 
   return (
     <main style={layoutStyles}>

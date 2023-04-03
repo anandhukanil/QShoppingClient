@@ -16,6 +16,12 @@ export const login = (username: string, password: string) => (
   })
 );
 
+export const googleLogin = (credential: string) => (
+  axios.post("/auth/google-login", {
+    credential,
+  })
+);
+
 export const refreshToken = (token: string) => (
   axios.post("/auth/refresh", {
     refreshToken: token
@@ -60,6 +66,14 @@ export const updateUserCart = (itemId: number, count: number, id: string) => (
   axios.post("/users/update-cart", {
     itemId,
     count,
+    id,
+  })
+);
+
+export const wishlistItem = (item: IProduct, id: string, action: "add"|"remove" = "add") => (
+  axios.post("/users/wishlist", {
+    item,
+    action,
     id,
   })
 );

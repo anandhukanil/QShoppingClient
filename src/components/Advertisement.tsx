@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { generatePath, useNavigate } from "react-router-dom";
 import { getProduct } from "../apis/products";
 import { warning } from "../assets";
 import { IProduct } from "../types";
@@ -9,6 +10,7 @@ import styles from "./styles.module.css";
 const Advertisement: React.FC<IProps> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<IProduct>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -22,6 +24,10 @@ const Advertisement: React.FC<IProps> = () => {
       }
     })();
   }, []);
+
+  const onBuyNowClick = () => {
+    navigate(generatePath("/products/:id", {id: String(product?.id)}));
+  };
 
   if (loading) {
     return (
@@ -40,7 +46,7 @@ const Advertisement: React.FC<IProps> = () => {
               <h2 className={styles.adTextDiscount}>New Arrival!</h2>
               <div className={styles.adTextTitle}>{product.title}</div>
               <p className={styles.adTextDescription}>{product.description}</p>
-              <button>Buy Now!</button>
+              <button onClick={onBuyNowClick}>Buy Now!</button>
             </div>
             <img src={product.images[0]} />
           </>

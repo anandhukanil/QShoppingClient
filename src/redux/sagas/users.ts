@@ -4,7 +4,7 @@ import { takeEvery, put, takeLatest, all, takeLeading, call } from "redux-saga/e
 import { logOut, refreshToken as refreshTokenApi } from "../../apis/users";
 import { IAction, LocalData, Types } from "../../types";
 import {
-  add_to_cart, add_to_wishlist, catch_exceptions, checkout_cart_items, remove_from_cart, remove_from_wishlist,
+  add_to_cart, catch_exceptions, checkout_cart_items, remove_from_cart,
   user_logout, user_login, set_current_user, token_refresh,
 } from "../actionsAndReducers/users";
 
@@ -28,7 +28,6 @@ function* tokenRefresh(action: any) {
     yield localStorage.setItem(LocalData.RefreshToken, refreshToken);
     yield put(token_refresh({refreshToken, accessToken}));
   } catch (error) {
-    console.error("🚀 ~ file: users.ts:31 ~ function*tokenRefresh ~ error:", error);
     yield put(catch_exceptions("Error while refreshing token!"));
   }
 }
@@ -88,30 +87,6 @@ export function* removeFromCartSaga() {
   yield takeEvery(Types.REMOVE_FROM_CART, removeFromCart);
 }
 
-function* addToWishList(action: IAction) {
-  try {
-    yield put(add_to_wishlist(action.payload));
-  } catch (error) {
-    yield put(catch_exceptions("Error while adding item to wishlist!"));
-  }
-}
-
-export function* addToWishListSaga() {
-  yield takeEvery(Types.ADD_TO_WISHLIST, addToWishList);
-}
-
-function* removeFromWishlist(action: IAction) {
-  try {
-    yield put(remove_from_wishlist(action.payload));
-  } catch (error) {
-    yield put(catch_exceptions("Error while removing item from wishlist!"));
-  }
-}
-
-export function* removeFromWishlistSaga() {
-  yield takeEvery(Types.REMOVE_FROM_WISHLIST, removeFromWishlist);
-}
-
 function* checkoutCartItems() {
   try {
     yield put(checkout_cart_items());
@@ -128,6 +103,6 @@ export function* checkoutCartItemsSaga() {
 export default function* userSaga() {
   yield all([
     loginUserSaga(), logoutUserSaga(), addToCartSaga(), removeFromCartSaga(), tokenRefreshSaga(),
-    addToWishListSaga(), removeFromWishlistSaga(), checkoutCartItemsSaga(), setCurrentUserSaga()
+    checkoutCartItemsSaga(), setCurrentUserSaga()
   ]);
 }

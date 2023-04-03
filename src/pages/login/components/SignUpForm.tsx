@@ -17,7 +17,13 @@ const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {
   const onSignUp = async (values: Record<string, string>) => {
     setLoading(true);
     try {
-      const response = await signup(values as unknown as (IUser&{password: string}));
+      const response = await signup({
+        firstName: values.fullName.split(" ")[0],
+        lastName: values.fullName.split(" ").slice(1).join(" "),
+        email: values.email,
+        password: values.confirmPassword,
+        id: "",
+      });
       const { accessToken, refreshToken, user } = response.data;
       dispatch({
         type: Types.USER_LOGIN,

@@ -76,6 +76,9 @@
   .cartRightWrapper > div h4 {
     min-width: auto!important;
   }
+  .fullWidthContents > div div.cartRightWrapper {
+    width: auto;
+  }
 }
 
 .cartWrapper {
@@ -205,4 +208,15 @@
 }
 .disabledCartCloseButtonStyles:hover {
   color: var(--paragraphText)!important;
+}
+
+.fullWidthContents {
+  display: flex;
+  flex-direction: column;
+}
+.fullWidthContents > div {
+  max-width: none;
+}
+.fullWidthContents > div div.cartPaymentSummaryItem {
+  border: none!important;
 }

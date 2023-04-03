@@ -14,7 +14,7 @@ const ImageHolder: React.FC<IProps> = (props) => {
       <div className={styles.imgDisplay}>
         {props.onWishlistClick && (<div
           className={props.wishListed ? `${styles.wishList} ${styles.active}` : styles.wishList}
-          onClick={props.onWishlistClick}
+          onClick={props.loading ? undefined : props.onWishlistClick}
         >
           <FaHeart />
         </div>)}
@@ -39,4 +39,5 @@ export interface IProps {
   images: string[];
   onWishlistClick?: () => void;
   wishListed?: boolean;
+  loading?: boolean;
 }

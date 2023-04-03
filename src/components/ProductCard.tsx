@@ -1,31 +1,45 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { IProduct, IState, NotificationTypes, Types } from "../types";
 import RatingComponent from "./RatingComponent";
 import { FaHeart, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import styles from "./styles.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { generatePath, Link } from "react-router-dom";
+import { wishlistItem } from "../apis/users";
 
 const ProductCard: React.FC<IProps> = ({ product }) => {
-  const { wishListItems, cartItems } = useSelector((state: IState) => state.users);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { currentUser, cartItems } = useSelector((state: IState) => state.users);
   const dispatch = useDispatch();
   const path = generatePath("/products/:id", {id: String(product.id)});
 
-  const wishListed = wishListItems.some((item) => item.id === product?.id);
+  const wishListed = currentUser?.wishlistItems?.some((item) => item.id === product?.id);
+
   const itemInCartCount = useMemo(() => cartItems
     .find((cartItem) => cartItem.item.id === product?.id)?.count,
   [cartItems]);
 
-  const onWhishListClick = () => {
-    if (wishListed) {
-      dispatch({ type: Types.REMOVE_FROM_WISHLIST, payload: product });
-    } else {
-      dispatch({ type: Types.ADD_TO_WISHLIST, payload: product });
+  const onWhishListClick = async () => {
+    setLoading(true);
+    try {
+      const response = await wishlistItem(product, currentUser?.id as string, (wishListed ? "remove" : "add"));
+      dispatch({
+        type: Types.SET_CURRENT_USER,
+        payload: response?.data,
+      });
       dispatch({
         type: Types.SET_NOTIFICATION,
-        payload: { type: NotificationTypes.Success, message: "Item added to Wishlist!" }
+        payload: {
+          type: NotificationTypes.Success,
+          message: wishListed ? "Item removed from Wishlist" : "Item added to Wishlist!"
+        }});
+    } catch (error) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Failed to add to Wishlist!" }
       });
     }
+    setLoading(false);
   };
 
   const onAddToCartClick = () => {
@@ -40,7 +54,7 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
     <div className={styles.productCardWrapper}>
       <div
         className={wishListed ? `${styles.wishList} ${styles.liked}` : styles.wishList}
-        onClick={onWhishListClick}
+        onClick={!loading ? onWhishListClick : undefined}
       >
         <FaHeart />
       </div>

@@ -52,6 +52,9 @@ export interface IUser {
 
 export interface IUserData extends IUser {
   hash: string;
+  cartItems: {item: IProduct; count: number;}[];
+  wishlistItems: IProduct[];
+  orders: { items: {item: IProduct; count: number;}[], ordered: string }[];
 }
 
 export enum Types {
@@ -66,8 +69,8 @@ export enum Types {
   USER_LOGIN = "user_login",
   ADD_TO_CART = "add_to_cart",
   REMOVE_FROM_CART = "remove_from_cart",
-  ADD_TO_WISHLIST = "add_to_wishlist",
-  REMOVE_FROM_WISHLIST = "remove_from_wishlist",
+  // ADD_TO_WISHLIST = "add_to_wishlist",
+  // REMOVE_FROM_WISHLIST = "remove_from_wishlist",
   CHECKOUT_CART_ITEMS = "checkout_cart_items",
 
   //Notification Actions
@@ -106,11 +109,10 @@ export interface IProductState {
 
 
 export interface IUserState {
-  currentUser: IUser|undefined;
+  currentUser: IUserData|undefined;
   refreshToken: string;
   accessToken: string;
   cartItems: { item: IProduct, count: number }[];
-  wishListItems: IProduct[];
   error: string;
 }
 

@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import { loginFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
 import { NotificationTypes, Types } from "../../../types";
-import { getDataFromGoogle } from "../../../helpers";
 import "../styles.css";
-import { login } from "../../../apis/users";
+import { googleLogin, login } from "../../../apis/users";
 
 const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
   const [buttonWidth, setButtonWidth] = useState<number>(380);
@@ -27,34 +26,27 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
     setButtonWidth(document.getElementsByClassName("login-form-inner")[0]?.clientWidth);
   };
 
-  const onGoogleSignInSuccess = (response: CredentialResponse) => {
+  const onGoogleSignInSuccess = async (credResponse: CredentialResponse) => {
     setLoading(true);
-    fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${response?.credential}`)
-      .then((res) => res.json())
-      .then((data) => {
-        getDataFromGoogle(data);
-        // let user = getUser(userData?.email);
-        // if (!user) {
-        //   user = addUser({ ...userData, hash: "" });
-        // }
-        // dispatch({
-        //   type: Types.SET_CURRENT_USER,
-        //   payload: user
-        // });
-        // localStorage.setItem(LocalData.LoggedInUserId, user?.id);
-        dispatch({
-          type: Types.SET_NOTIFICATION,
-          payload: { type: NotificationTypes.Success, message: "Login Success!" }
-        });
-        onLoginCompleted();
-      })
-      .catch(() => {
-        dispatch({
-          type: Types.SET_NOTIFICATION,
-          payload: { type: NotificationTypes.Error, message: "Failed to login!" }
-        });
-      })
-      .finally(() => setLoading(false));
+    try {
+      const response = await googleLogin(credResponse.credential as string);
+      const { accessToken, refreshToken, user } = response.data;
+      dispatch({
+        type: Types.USER_LOGIN,
+        payload: { accessToken, refreshToken, user }
+      });
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Success, message: "Login Success!" }
+      });
+      onLoginCompleted();
+    } catch (error) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Error, message: "Failed to login!" }
+      });
+    }
+    setLoading(false);
   };
 
   const onGoogleSignInFailed = () => {

@@ -7,9 +7,9 @@ import { IState } from "../../types";
 import styles from "./styles.module.css";
 
 const Wishlist: React.FC<IProps> = () => {
-  const { wishListItems } = useSelector((state: IState) => state.users);
+  const { currentUser } = useSelector((state: IState) => state.users);
 
-  if (!wishListItems?.length) {
+  if (!currentUser?.wishlistItems?.length) {
     return (
       <ErrorPage
         image={wishlist}
@@ -24,7 +24,7 @@ const Wishlist: React.FC<IProps> = () => {
     <div className={styles.wishlistPageWrapper}>
       <h2>Wishlist Items</h2>
       <div className={styles.wishlistItemsContainer}>
-        {wishListItems.map((item) => (
+        {currentUser?.wishlistItems?.map((item) => (
           <ProductCard
             key={item.id}
             product={item}

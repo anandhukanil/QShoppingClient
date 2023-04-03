@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { FaMinus, FaPlus, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkoutOrder, removeFromUserCart, updateUserCart } from "../../apis/users";
+import { checkoutOrder } from "../../apis/users";
 import { emptyCart, orderDelivered } from "../../assets";
 import CardWithHeader from "../../components/CardWithHeader";
 import ErrorPage from "../../components/ErrorPage";
@@ -22,11 +22,11 @@ const CartPage: React.FC<IProps> = () => {
   const onRemoveFromCart = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      const response = await removeFromUserCart(item, currentUser?.id as string);
-      dispatch({
-        type: Types.SET_CURRENT_USER,
-        payload: response?.data,
-      });
+      // const response = await removeFromUserCart(item, currentUser?.id as string);
+      // dispatch({
+      //   type: Types.SET_CURRENT_USER,
+      //   payload: response?.data,
+      // });
       dispatch({
         type: Types.REMOVE_FROM_CART,
         payload: { product: item?.item, count: item?.count }
@@ -46,11 +46,11 @@ const CartPage: React.FC<IProps> = () => {
   const addItemCount = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      const response = await updateUserCart(item.item.id, 1, currentUser?.id as string);
-      dispatch({
-        type: Types.SET_CURRENT_USER,
-        payload: response?.data,
-      });
+      // const response = await updateUserCart(item.item.id, 1, currentUser?.id as string);
+      // dispatch({
+      //   type: Types.SET_CURRENT_USER,
+      //   payload: response?.data,
+      // });
       dispatch({
         type: Types.ADD_TO_CART,
         payload: { product: item?.item }
@@ -66,11 +66,11 @@ const CartPage: React.FC<IProps> = () => {
   const removeItemCount = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      const response = await updateUserCart(item.item.id, -1, currentUser?.id as string);
-      dispatch({
-        type: Types.SET_CURRENT_USER,
-        payload: response?.data,
-      });
+      // const response = await updateUserCart(item.item.id, -1, currentUser?.id as string);
+      // dispatch({
+      //   type: Types.SET_CURRENT_USER,
+      //   payload: response?.data,
+      // });
       dispatch({
         type: Types.REMOVE_FROM_CART,
         payload: { product: item?.item }
@@ -92,6 +92,13 @@ const CartPage: React.FC<IProps> = () => {
       });
       navigate(routes.login.path, { state: { from: location } });
       return;
+    } else if (!currentUser.address) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Info, message: "Please update address to checkout!" }
+      });
+      setLoading(false);
+      return;
     }
     try {
       const response = await checkoutOrder(cartItems, currentUser.id);
@@ -112,8 +119,8 @@ const CartPage: React.FC<IProps> = () => {
     setLoading(false);
   };
 
-  const totalActualPrice = useMemo(() => getOriginalPrice(cartItems),[cartItems]);
-  const totalDiscountPrice = useMemo(() => getDiscountPrice(cartItems),[cartItems]);
+  const totalActualPrice = useMemo(() => getOriginalPrice(cartItems), [cartItems]);
+  const totalDiscountPrice = useMemo(() => getDiscountPrice(cartItems), [cartItems]);
 
   if (checkOut) {
     return (
@@ -151,14 +158,14 @@ const CartPage: React.FC<IProps> = () => {
                   <div>
                     <button
                       onClick={() => removeItemCount(item)}
-                      disabled={(item?.count === 1)||loading}
+                      disabled={(item?.count === 1) || loading}
                     >
                       <FaMinus />
                     </button>
                     <span>{item?.count}</span>
                     <button
                       onClick={() => addItemCount(item)}
-                      disabled={(item?.count === item?.item?.stock)||loading}
+                      disabled={(item?.count === item?.item?.stock) || loading}
                     >
                       <FaPlus />
                     </button>
@@ -196,11 +203,11 @@ const CartPage: React.FC<IProps> = () => {
           </div>
           <div className={styles.cartPaymentSummaryItem}>
             <div className={styles.discountItem}>
-          You will save {formatCurrency(totalDiscountPrice)} on this order
+              You will save {formatCurrency(totalDiscountPrice)} on this order
             </div>
           </div>
         </CardWithHeader>
-        {currentUser && currentUser.address &&(<CardWithHeader
+        {currentUser && currentUser.address && (<CardWithHeader
           title="Shipping"
         >
           <div className={styles.cartPaymentSummaryItem}>Deliver To:</div>
@@ -222,9 +229,9 @@ const CartPage: React.FC<IProps> = () => {
 
 export default CartPage;
 
-export interface IProps {}
+export interface IProps { }
 
-const getOriginalPrice = (cartItems: {item: IProduct; count: number;}[]) => {
+const getOriginalPrice = (cartItems: { item: IProduct; count: number; }[]) => {
   let totalPrice = 0;
   cartItems?.forEach((cartItem) => {
     totalPrice += (
@@ -234,11 +241,11 @@ const getOriginalPrice = (cartItems: {item: IProduct; count: number;}[]) => {
 
   return totalPrice;
 };
-const getDiscountPrice = (cartItems: {item: IProduct; count: number;}[]) => {
+const getDiscountPrice = (cartItems: { item: IProduct; count: number; }[]) => {
   let totalDiscount = 0;
   cartItems?.forEach((cartItem) => {
     totalDiscount += (
-      (cartItem?.item.price / (1-cartItem?.item.discountPercentage / 100))
+      (cartItem?.item.price / (1 - cartItem?.item.discountPercentage / 100))
       - cartItem?.item.price
     ) * cartItem?.count;
   });

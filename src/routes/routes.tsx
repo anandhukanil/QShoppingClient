@@ -7,6 +7,7 @@ import { IRoutes } from "../types";
 import ProductDetailsPage from "../pages/listing/ProductDetailsPage";
 import ProductListing from "../pages/listing/ProductListing";
 import LogInSignUpPage from "../pages/login/LogInSignUpPage";
+import Orders from "../pages/profile/Orders";
 
 export const routes: IRoutes = {
   landing: {
@@ -47,7 +48,7 @@ export const routes: IRoutes = {
       {
         name: "orders",
         path: "orders",
-        element: <CartPage />
+        element: <Orders />
       }
     ]
   },
