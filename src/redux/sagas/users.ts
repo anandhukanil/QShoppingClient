@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from "axios";
 import { takeEvery, put, takeLatest, all, takeLeading, call } from "redux-saga/effects";
-import { logOut, refreshToken as refreshTokenApi } from "../../apis/users";
+import { addToUserCart, logOut, refreshToken as refreshTokenApi, removeFromUserCart } from "../../apis/users";
 import { IAction, LocalData, Types } from "../../types";
 import {
   add_to_cart, catch_exceptions, checkout_cart_items, remove_from_cart,
@@ -63,8 +63,13 @@ export function* logoutUserSaga() {
   yield takeLeading(Types.USER_LOGOUT, logoutUser);
 }
 
-function* addToCart(action: IAction) {
+function* addToCart(action: any) {
   try {
+    if (action.payload.userId) {
+      yield call(() => addToUserCart(
+        action.payload?.product, action.payload?.userId, action.payload.count
+      ));
+    }
     yield put(add_to_cart(action.payload));
   } catch (error) {
     yield put(catch_exceptions("Error while adding item to the cart!"));
@@ -75,8 +80,13 @@ export function* addToCartSaga() {
   yield takeEvery(Types.ADD_TO_CART, addToCart);
 }
 
-function* removeFromCart(action: IAction) {
+function* removeFromCart(action: any) {
   try {
+    if (action.payload.userId) {
+      yield call(() => removeFromUserCart(
+        action.payload?.product, action.payload?.userId, action.payload.count
+      ));
+    }
     yield put(remove_from_cart(action.payload));
   } catch (error) {
     yield put(catch_exceptions("Error while removing item from the cart!"));
@@ -103,6 +113,6 @@ export function* checkoutCartItemsSaga() {
 export default function* userSaga() {
   yield all([
     loginUserSaga(), logoutUserSaga(), addToCartSaga(), removeFromCartSaga(), tokenRefreshSaga(),
-    checkoutCartItemsSaga(), setCurrentUserSaga()
+    checkoutCartItemsSaga(), setCurrentUserSaga(),
   ]);
 }

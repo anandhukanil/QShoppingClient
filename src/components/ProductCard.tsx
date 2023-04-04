@@ -11,12 +11,12 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { currentUser, cartItems } = useSelector((state: IState) => state.users);
   const dispatch = useDispatch();
-  const path = generatePath("/products/:id", {id: String(product.id)});
+  const path = generatePath("/products/:id", {id: String(product?.id)});
 
   const wishListed = currentUser?.wishlistItems?.some((item) => item.id === product?.id);
 
   const itemInCartCount = useMemo(() => cartItems
-    .find((cartItem) => cartItem.item.id === product?.id)?.count,
+    ?.find((cartItem) => cartItem?.item?.id === product?.id)?.count,
   [cartItems]);
 
   const onWhishListClick = async () => {
@@ -43,11 +43,11 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
   };
 
   const onAddToCartClick = () => {
-    dispatch({ type: Types.ADD_TO_CART, payload: { product } });
+    dispatch({ type: Types.ADD_TO_CART, payload: { product, userId: currentUser?.id } });
   };
 
   const onRemoveFromCartClick = () => {
-    dispatch({ type: Types.REMOVE_FROM_CART, payload: {product} });
+    dispatch({ type: Types.REMOVE_FROM_CART, payload: { product, userId: currentUser?.id } });
   };
 
   return (

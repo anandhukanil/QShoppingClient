@@ -54,7 +54,7 @@ export interface IUserData extends IUser {
   hash: string;
   cartItems: {item: IProduct; count: number;}[];
   wishlistItems: IProduct[];
-  orders: { items: {item: IProduct; count: number;}[], ordered: string }[];
+  orders: { items: {item: IProduct; count: number;}[], ordered: string, _id: string }[];
 }
 
 export enum Types {
@@ -69,6 +69,7 @@ export enum Types {
   USER_LOGIN = "user_login",
   ADD_TO_CART = "add_to_cart",
   REMOVE_FROM_CART = "remove_from_cart",
+  SET_CART_ITEMS = "set_cart_items",
   // ADD_TO_WISHLIST = "add_to_wishlist",
   // REMOVE_FROM_WISHLIST = "remove_from_wishlist",
   CHECKOUT_CART_ITEMS = "checkout_cart_items",

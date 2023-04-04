@@ -5,6 +5,7 @@ const CardWithHeader: React.FC<PropsWithChildren<IProps>> = (props) => {
 
   return (
     <div className={styles.cardWithHeaderContainer}>
+      {props.titleComponent && <props.titleComponent />}
       {props.title && <div className={styles.cardWithHeaderHeader}>{props.title}</div>}
       <div>
         {props.children}
@@ -16,5 +17,6 @@ const CardWithHeader: React.FC<PropsWithChildren<IProps>> = (props) => {
 export default CardWithHeader;
 
 export interface IProps {
-  title: string;
+  title?: string;
+  titleComponent?: React.FC;
 }

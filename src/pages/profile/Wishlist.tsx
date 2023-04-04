@@ -2,12 +2,23 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { wishlist } from "../../assets";
 import ErrorPage from "../../components/ErrorPage";
+import LoadingComponent from "../../components/LoadingComponent";
 import ProductCard from "../../components/ProductCard";
 import { IState } from "../../types";
 import styles from "./styles.module.css";
 
 const Wishlist: React.FC<IProps> = () => {
   const { currentUser } = useSelector((state: IState) => state.users);
+
+  if (!currentUser) {
+    return (
+      <div>
+        <div style={{ margin: "4em" }}>
+          <LoadingComponent />
+        </div>
+      </div>
+    );
+  }
 
   if (!currentUser?.wishlistItems?.length) {
     return (

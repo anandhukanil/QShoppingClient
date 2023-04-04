@@ -1,5 +1,3 @@
-import { IUser } from "../types";
-
 export const getActualPrice = (price: number, discount: number) => {
   return formatCurrency((price / (1 - discount/100)));
 };

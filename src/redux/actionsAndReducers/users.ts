@@ -31,7 +31,8 @@ const userSlice = createSlice({
         ...state,
         currentUser: action.payload?.user,
         accessToken: action.payload?.accessToken,
-        refreshToken: action.payload?.refreshToken
+        refreshToken: action.payload?.refreshToken,
+        cartItems: action.payload?.user?.cartItems
       };
     },
     [Types.TOKEN_REFRESH]: (state, action) => {

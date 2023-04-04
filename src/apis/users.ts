@@ -48,25 +48,19 @@ export const checkoutOrder = (data: {item: IProduct, count: number }[], id: stri
   })
 );
 
-export const addToUserCart = (data: {item: IProduct, count: number }, id: string) => (
+export const addToUserCart = (product: IProduct, id: string, count?: number) => (
   axios.post("/users/add-to-cart", {
-    item: data,
+    product,
     id,
+    count
   })
 );
 
-export const removeFromUserCart = (data: {item: IProduct, count: number }, id: string) => (
+export const removeFromUserCart = (product: IProduct, id: string, count?: number) => (
   axios.post("/users/remove-from-cart", {
-    item: data,
+    product,
     id,
-  })
-);
-
-export const updateUserCart = (itemId: number, count: number, id: string) => (
-  axios.post("/users/update-cart", {
-    itemId,
-    count,
-    id,
+    count
   })
 );
 

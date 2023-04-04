@@ -10,7 +10,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { OAuthClientID } from "./const/creds";
 
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://qshopping-server.azurewebsites.net";
+// axios.defaults.baseURL = "http://localhost:3001";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

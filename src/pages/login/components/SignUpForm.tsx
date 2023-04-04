@@ -5,7 +5,7 @@ import { signUpFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
 import "../styles.css";
 import { signup } from "../../../apis/users";
-import { IUser, NotificationTypes, Types } from "../../../types";
+import { NotificationTypes, Types } from "../../../types";
 import { routes } from "../../../routes/routes";
 
 const SignUpForm: React.FC<IProps> = ({onToggleForm}) => {

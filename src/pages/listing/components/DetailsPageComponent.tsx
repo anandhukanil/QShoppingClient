@@ -42,7 +42,9 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
   };
 
   const onAddToCartClick = () => {
-    dispatch({ type: Types.ADD_TO_CART, payload: {product, count: itemCount} });
+    dispatch({ type: Types.ADD_TO_CART, payload: {
+      product, count: itemCount, userId: currentUser?.id
+    }});
     dispatch({
       type: Types.SET_NOTIFICATION,
       payload: { type: NotificationTypes.Success, message: "Item added to Cart!" }
@@ -54,7 +56,9 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
       && (cart?.count >= itemCount));
 
     if(!itemAdded) {
-      dispatch({ type: Types.ADD_TO_CART, payload: {product, count: itemCount} });
+      dispatch({ type: Types.ADD_TO_CART, payload: {
+        product, count: itemCount, userId: currentUser?.id
+      }});
     }
 
     navigate(routes.cart.path);

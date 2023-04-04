@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { emptyCart } from "../../assets";
 import CardWithHeader from "../../components/CardWithHeader";
 import ErrorPage from "../../components/ErrorPage";
+import LoadingComponent from "../../components/LoadingComponent";
 import { formatCurrency } from "../../helpers";
 import { IProduct, IState } from "../../types";
 import styles from "../cart/styles.module.css";
@@ -11,7 +12,17 @@ import styles from "../cart/styles.module.css";
 const Orders: React.FC<IProps> = () => {
   const { currentUser } = useSelector((state: IState) => state.users);
 
-  if (!currentUser?.orders?.length) {
+  if (!currentUser) {
+    return (
+      <div>
+        <div style={{ margin: "4em" }}>
+          <LoadingComponent />
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser.orders?.length) {
     return (
       <ErrorPage
         image={emptyCart}
@@ -23,9 +34,10 @@ const Orders: React.FC<IProps> = () => {
 
   return (
     <div className={styles.fullWidthContents}>
+      <h2>Orders</h2>
       {currentUser?.orders?.map((order) => (
         <CardWithHeader
-          title={getOrderDate(order.ordered)}
+          titleComponent={getTitleComponent(order.ordered, order._id)}
           key={order.ordered}
         >
           {order.items?.map((item) => (
@@ -58,17 +70,6 @@ export default Orders;
 
 export interface IProps {}
 
-
-const getOrderDate = (date: string) => {
-  const dateObject = new Date(date);
-  const options: Intl.DateTimeFormatOptions = {  
-    weekday: "long", year: "numeric", month: "short",  
-    day: "numeric", hour: "2-digit", minute: "2-digit"  
-  }; 
-
-  return dateObject.toLocaleTimeString("en-us", options);
-};
-
 const getTotalPrice = (data: {item: IProduct, count: number}[]) => {
   let totalPrice = 0;
   data?.forEach((items) => {
@@ -77,3 +78,11 @@ const getTotalPrice = (data: {item: IProduct, count: number}[]) => {
 
   return totalPrice;
 };
+
+// eslint-disable-next-line react/display-name
+const getTitleComponent = (ordered: string, id: string): React.FC => (() => (
+  <div className={styles.ordersTitleWrapper}>
+    <h3>Order Id: <span>{id}</span></h3>
+    <h3>Date: {new Date(ordered).toLocaleDateString()}</h3>
+  </div>
+));

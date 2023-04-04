@@ -6,9 +6,10 @@ import { checkoutOrder } from "../../apis/users";
 import { emptyCart, orderDelivered } from "../../assets";
 import CardWithHeader from "../../components/CardWithHeader";
 import ErrorPage from "../../components/ErrorPage";
+import LoadingComponent from "../../components/LoadingComponent";
 import { formatCurrency } from "../../helpers";
 import { routes } from "../../routes/routes";
-import { IAddress, IProduct, IState, NotificationTypes, Types } from "../../types";
+import { IAddress, IProduct, IState, LocalData, NotificationTypes, Types } from "../../types";
 import styles from "./styles.module.css";
 
 const CartPage: React.FC<IProps> = () => {
@@ -22,14 +23,9 @@ const CartPage: React.FC<IProps> = () => {
   const onRemoveFromCart = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      // const response = await removeFromUserCart(item, currentUser?.id as string);
-      // dispatch({
-      //   type: Types.SET_CURRENT_USER,
-      //   payload: response?.data,
-      // });
       dispatch({
         type: Types.REMOVE_FROM_CART,
-        payload: { product: item?.item, count: item?.count }
+        payload: { product: item?.item, count: item?.count, userId: currentUser?.id }
       });
       dispatch({
         type: Types.SET_NOTIFICATION,
@@ -46,14 +42,9 @@ const CartPage: React.FC<IProps> = () => {
   const addItemCount = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      // const response = await updateUserCart(item.item.id, 1, currentUser?.id as string);
-      // dispatch({
-      //   type: Types.SET_CURRENT_USER,
-      //   payload: response?.data,
-      // });
       dispatch({
         type: Types.ADD_TO_CART,
-        payload: { product: item?.item }
+        payload: { product: item?.item, userId: currentUser?.id }
       });
     } catch (error) {
       dispatch({
@@ -66,14 +57,9 @@ const CartPage: React.FC<IProps> = () => {
   const removeItemCount = async (item: typeof cartItems[0]) => {
     setLoading(true);
     try {
-      // const response = await updateUserCart(item.item.id, -1, currentUser?.id as string);
-      // dispatch({
-      //   type: Types.SET_CURRENT_USER,
-      //   payload: response?.data,
-      // });
       dispatch({
         type: Types.REMOVE_FROM_CART,
-        payload: { product: item?.item }
+        payload: { product: item?.item, userId: currentUser?.id }
       });
     } catch (error) {
       dispatch({
@@ -132,6 +118,16 @@ const CartPage: React.FC<IProps> = () => {
     );
   }
 
+  if (isUserLoggedIn() && !currentUser) {
+    return (
+      <div>
+        <div style={{ margin: "4em" }}>
+          <LoadingComponent />
+        </div>
+      </div>
+    );
+  }
+
   if (!cartItems?.length) {
     return (
       <ErrorPage
@@ -150,7 +146,7 @@ const CartPage: React.FC<IProps> = () => {
       >
         {cartItems?.map((item) => (
           <div className={styles.categoryCardWrapper} key={item?.item.id}>
-            <img src={item?.item.thumbnail} />
+            <img src={item?.item?.thumbnail} />
             <div className={styles.cartProductPrice}>
               <h3>{item?.item.title}</h3>
               <div className={styles.cartRightWrapper}>
@@ -170,7 +166,7 @@ const CartPage: React.FC<IProps> = () => {
                       <FaPlus />
                     </button>
                   </div>
-                  <h4>{formatCurrency(item?.item.price * item?.count)}</h4>
+                  <h4>{formatCurrency(item?.item?.price * item?.count)}</h4>
                 </div>
                 <FaTimes
                   className={loading ? styles.disabledCartCloseButtonStyles : ""}
@@ -235,7 +231,7 @@ const getOriginalPrice = (cartItems: { item: IProduct; count: number; }[]) => {
   let totalPrice = 0;
   cartItems?.forEach((cartItem) => {
     totalPrice += (
-      cartItem?.item.price / ((100 - cartItem?.item.discountPercentage) / 100)
+      cartItem?.item?.price / ((100 - cartItem?.item?.discountPercentage) / 100)
     ) * cartItem?.count;
   });
 
@@ -245,10 +241,12 @@ const getDiscountPrice = (cartItems: { item: IProduct; count: number; }[]) => {
   let totalDiscount = 0;
   cartItems?.forEach((cartItem) => {
     totalDiscount += (
-      (cartItem?.item.price / (1 - cartItem?.item.discountPercentage / 100))
-      - cartItem?.item.price
+      (cartItem?.item?.price / (1 - cartItem?.item?.discountPercentage / 100))
+      - cartItem?.item?.price
     ) * cartItem?.count;
   });
 
   return totalDiscount;
 };
+
+const isUserLoggedIn = () => !!localStorage.getItem(LocalData.RefreshToken);
