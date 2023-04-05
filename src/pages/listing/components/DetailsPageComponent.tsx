@@ -21,6 +21,13 @@ const DetailsPageComponent: React.FC<IProps> = ({ product }) => {
   const wishListed = currentUser?.wishlistItems?.some((item) => item.id === product?.id);
 
   const onWishlistClick = async () => {
+    if (!currentUser) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Info, message: "Please login to wishlist!" }
+      });
+      return;
+    }
     setLoading(true);
     try {
       const response = await wishlistItem(product, currentUser?.id as string, (wishListed ? "remove" : "add"));

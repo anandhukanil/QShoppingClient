@@ -14,12 +14,17 @@ const DropdownMenu: React.FC<IProps> = (props) => {
   const handleMouseLeave = () => {
     setOpen(false);
   };
+
+  const onClick = () => {
+    setOpen(false);
+  };
   
   return (
     <div
       className='dropdown'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={onClick}
     >
       <div className='dropdown-header'>
         {props.labelComponent ? <props.labelComponent /> : props.label}

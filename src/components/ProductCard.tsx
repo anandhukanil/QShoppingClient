@@ -20,6 +20,13 @@ const ProductCard: React.FC<IProps> = ({ product }) => {
   [cartItems]);
 
   const onWhishListClick = async () => {
+    if (!currentUser) {
+      dispatch({
+        type: Types.SET_NOTIFICATION,
+        payload: { type: NotificationTypes.Info, message: "Please login to wishlist!" }
+      });
+      return;
+    }
     setLoading(true);
     try {
       const response = await wishlistItem(product, currentUser?.id as string, (wishListed ? "remove" : "add"));
