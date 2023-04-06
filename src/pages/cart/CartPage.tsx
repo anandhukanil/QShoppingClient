@@ -105,6 +105,10 @@ const CartPage: React.FC<IProps> = () => {
     setLoading(false);
   };
 
+  const onAddAddressClick = () => {
+    navigate(routes.profile.path, { state: { type: "address" } });
+  };
+
   const totalActualPrice = useMemo(() => getOriginalPrice(cartItems), [cartItems]);
   const totalDiscountPrice = useMemo(() => getDiscountPrice(cartItems), [cartItems]);
 
@@ -203,20 +207,31 @@ const CartPage: React.FC<IProps> = () => {
             </div>
           </div>
         </CardWithHeader>
-        {currentUser && currentUser.address && (<CardWithHeader
+        <CardWithHeader
           title="Shipping"
         >
-          <div className={styles.cartPaymentSummaryItem}>Deliver To:</div>
-          <div className={styles.addressDataWrapper}>
-            {Object.keys(currentUser?.address as IAddress)
-              .filter((key) => key !== "_id")
-              .map((key) => (currentUser?.address as IAddress)[key as keyof IAddress])
-              .join(", ")}
-          </div>
+          {currentUser?.address
+            ? (
+              <>
+                <div className={styles.cartPaymentSummaryItem}>Deliver To:</div>
+                <div className={styles.addressDataWrapper}>
+                  {Object.keys(currentUser?.address as IAddress)
+                    .filter((key) => key !== "_id")
+                    .map((key) => (currentUser?.address as IAddress)[key as keyof IAddress])
+                    .join(", ")}
+                </div>
+              </>
+            )
+            : (
+              <div className={`${styles.cartButtonWrapper} ${styles.cartAddAddressButton}`}>
+                <button onClick={onAddAddressClick}>Add Address</button>
+              </div>
+            )
+          }
         </CardWithHeader>
-        )}
+        
         <div className={styles.cartButtonWrapper}>
-          <button onClick={onCheckoutClick} disabled={loading}>Proceed To Checkout</button>
+          <button onClick={onCheckoutClick} disabled={loading||!currentUser?.address}>Proceed To Checkout</button>
         </div>
       </div>
     </div>

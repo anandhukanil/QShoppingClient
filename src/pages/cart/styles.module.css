@@ -217,6 +217,9 @@
 .disabledCartCloseButtonStyles:hover {
   color: var(--paragraphText)!important;
 }
+.cartAddAddressButton > button {
+  padding: 15px 35px!important;
+}
 
 .fullWidthContents {
   display: flex;

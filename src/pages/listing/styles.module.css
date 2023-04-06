@@ -27,10 +27,11 @@
   font-size: 1.5rem;
 }
 .productListItemsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 350px);
+  justify-content: space-between;
+  grid-gap: 30px 10px;
+  width: 100%;
 }
 .productListItemsContainer > div {
   margin: 0;

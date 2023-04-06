@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   FaBoxOpen, FaHeart, FaSignOutAlt, FaUser, FaUserCog,
-  FaBars, FaShoppingCart, FaSignInAlt
+  FaBars, FaShoppingCart, FaSignInAlt, FaAddressCard
 } from "react-icons/fa";
 import { IMenuItem, IState, Types } from "../types";
-import {routes} from "../routes/routes";
+import { routes } from "../routes/routes";
 import styles from "./styles.module.css";
 import Search from "./Search";
 import DropdownMenu from "./DropdownMenu";
@@ -14,8 +14,8 @@ import DropdownMenu from "./DropdownMenu";
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartItems, currentUser, refreshToken } = useSelector((state: IState) => state.users);
-
 
   const onSignOut = useCallback(() => {
     dispatch({
@@ -24,11 +24,21 @@ const Navbar: React.FC = () => {
     });
   }, [dispatch, currentUser, refreshToken]);
 
+  const onAddressClick = useCallback(() => {
+    navigate(routes.profile.path, { state: { type: "address" } });
+  }, []);
+
   const options: IMenuItem[] = useMemo(() => [
     {
       label: "Profile",
       path: routes.profile?.path,
       icon: FaUserCog
+    },
+    {
+      label: "Address",
+      path: "address",
+      icon: FaAddressCard,
+      onClick: onAddressClick,
     },
     {
       label: "Wishlists",
@@ -69,14 +79,14 @@ const Navbar: React.FC = () => {
                     label="Account"
                     labelComponent={LabelComponent}
                     menuItems={options}
-                    // hideChevronIcon
+                  // hideChevronIcon
                   />
                 )
                 : (
                   <NavLink
                     key="Login"
                     to={routes.login.path}
-                    className={({isActive}) => isActive ? styles.navLinkHiddenItem : ""}
+                    className={({ isActive }) => isActive ? styles.navLinkHiddenItem : ""}
                   >
                     <FaSignInAlt />
                     Login
@@ -87,7 +97,7 @@ const Navbar: React.FC = () => {
               <Link key={"Cart"} to={routes.cart.path}>
                 {!!cartItems.length && <span className={styles.cartCount}>{cartItems.length}</span>}
                 <FaShoppingCart />
-                  Cart
+                Cart
               </Link>
             </li>
             <li className={`${styles.navbarItem} ${styles.searchItem}`}>

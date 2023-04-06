@@ -36,10 +36,12 @@ const Wishlist: React.FC<IProps> = () => {
       <h2>Wishlist Items</h2>
       <div className={styles.wishlistItemsContainer}>
         {currentUser?.wishlistItems?.map((item) => (
+          // <div key={item.id}>
           <ProductCard
             key={item.id}
             product={item}
           />
+          // </div>
         ))}
       </div>
     </div>

@@ -904,7 +904,7 @@ nav + .carousel {
 }
 
 .searchWrapper.searchActive .searchButton {
-  transform: translateX(198px);
+  transform: translateX(160px);
 }
 
 

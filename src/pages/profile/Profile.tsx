@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FormComponent, { IProps } from "../../components/FormComponent";
 import { addressFields, profileFields } from "../../const/fields";
@@ -9,6 +9,7 @@ import { updateUser } from "../../apis/users";
 import LoadingComponent from "../../components/LoadingComponent";
 import { address, profile } from "../../assets";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 
 const Profile: React.FC = () => {
@@ -16,6 +17,13 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { currentUser } = useSelector((state: IState) => state.users);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.type === "address") {
+      setActive(true);
+    }
+  }, []);
 
   const toggleForm = () => {
     setActive((prevState) => !prevState);
