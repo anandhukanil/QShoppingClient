@@ -22,8 +22,10 @@ const Profile: React.FC = () => {
   useEffect(() => {
     if (location?.state?.type === "address") {
       setActive(true);
+    } else if (location?.state?.type === "profile") {
+      setActive(false);
     }
-  }, []);
+  }, [location?.state]);
 
   const toggleForm = () => {
     setActive((prevState) => !prevState);

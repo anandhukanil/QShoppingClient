@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
-import { loginFields } from "../../../const/fields";
 import FormComponent from "../../../components/FormComponent";
-import { NotificationTypes, Types } from "../../../types";
+import { FieldTypes, IFormField, IFormFieldProps, NotificationTypes, Types } from "../../../types";
 import "../styles.css";
 import { googleLogin, login } from "../../../apis/users";
+import PasswordComponent from "./PasswordComponent";
 
-const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
+const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted, onToggleReset}) => {
   const [buttonWidth, setButtonWidth] = useState<number>(380);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -85,6 +85,26 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
     }
   };
 
+  const loginFields: IFormField[] = useMemo(() => [
+    {
+      fieldType: FieldTypes.Email,
+      name: "username",
+      label: "Email",
+      placeholder: "someone@example.com",
+      required: true,
+    },
+    {
+      fieldType: FieldTypes.Password,
+      name: "password",
+      label: "Password",
+      placeholder: "Password",
+      required: true,
+      validationRules: { minLength: 8 },
+      skipValidation: true,
+      component: (_props: IFormFieldProps) => <PasswordComponent {..._props} onToggleReset={onToggleReset} />,
+    },
+  ], []);
+
   return (
     <div className="login-form">
       <div className="login-form-inner">
@@ -96,11 +116,6 @@ const LoginForm: React.FC<IProps> = ({onToggleForm, onLoginCompleted}) => {
           onSubmit={onSignIn}
           disableSubmit={loading}
         />
-        {/* <div className="login-form-group single-row">
-          <div className="custom-check">
-            <input autoComplete="off" type="checkbox" checked id="remember" /><label htmlFor="remember">Remember me</label>
-          </div>
-        <a href="#" className="link forgot-link">Forgot Password ?</a> */}
         {errorMessage && <div className="loginErrorMessage">{errorMessage}</div>}
         <div className="sign-in-seperator">
           <span>or</span>
@@ -123,4 +138,5 @@ export default LoginForm;
 export interface IProps {
   onToggleForm: () => void;
   onLoginCompleted: () => void;
+  onToggleReset: () => void;
 }

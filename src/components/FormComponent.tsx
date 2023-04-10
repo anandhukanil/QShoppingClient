@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import { removeKeys, validateEmail, validatePassword } from "../helpers";
-import { FieldTypes, IFormField } from "../types";
+import { FieldTypes, IFormField, IFormFieldProps } from "../types";
 import styles from "./styles.module.css";
 
 const FormComponent: React.FC<PropsWithChildren<IProps>> = (props) => {
@@ -29,27 +29,40 @@ const FormComponent: React.FC<PropsWithChildren<IProps>> = (props) => {
       {props.description && <p className="body-text">{props.description}</p>}
       {props.fields?.map((field) => (
         <div className="login-form-group" key={field.name}>
-          <label htmlFor={field.name}>
-            {field.label}
-            {field.required && <span className="required-star">*</span>}
-          </label>
-          <div className={styles.inputWrapper}>
-            <input
+          {field.component ? (
+            <field.component
               className={field.className ?? (fieldErrors[field.name] && styles.errorField)}
-              type={field.fieldType}
+              field={field}
               id={field.name}
               value={values[field.name]}
-              {...removeKeys(["fieldType", "customValidation", "validationRules", "skipValidation"], field)}
-              onChange={(e) => onChangeHandler(e, field.name)}
+              onChange={onChangeHandler}
             />
-            {field.tooltip && <span className={styles.tooltip} data-tooltip={field.tooltip}>i</span>}
-          </div>
+          ): (
+            <>
+              <label htmlFor={field.name}>
+                {field.label}
+                {field.required && <span className="required-star">*</span>}
+              </label>
+              <div className={styles.inputWrapper}>
+                {getField({
+                  field,
+                  className: field.className ?? (fieldErrors[field.name] && styles.errorField),
+                  id: field.name,
+                  value: values[field.name],
+                  onChange: onChangeHandler,
+                })}
+                {field.tooltip && <span className={styles.tooltip} data-tooltip={field.tooltip}>i</span>}
+              </div>
+            </>
+          )}
           {fieldErrors[field.name] && <div className={styles.errorMessage}>{fieldErrors[field.name]}</div>}
         </div>
       ))}
-      <button disabled={props.disableSubmit} className="rounded-button login-cta" type="submit">
-        {props.submitButtonText||"Login"}
-      </button>
+      <div>
+        <button disabled={props.disableSubmit} className="rounded-button login-cta" type="submit">
+          {props.submitButtonText||"Submit"}
+        </button>
+      </div>
       {props.children}
     </form>
   );
@@ -124,3 +137,37 @@ const setInitialValues = (fields: IFormField[], values?: Record<string, string>)
   .reduce((prevValue, currentValue) => (
     {...prevValue, [currentValue.name]: (values && values[currentValue.name] || "") }
   ), {}));
+
+export const getField = (data: IFormFieldProps) => {
+  switch (data.field.fieldType) {
+  case FieldTypes.Select:
+    return (
+      <select
+        className={data.className}
+        id={data.field.name}
+        value={data.value}
+        {...removeKeys(["fieldType", "customValidation", "validationRules", "skipValidation", "options"], data.field)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onChange={(e: any) => data.onChange(e, data.field.name)}
+      >
+        {data.field.options?.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    );
+  
+  default:
+    return (
+      <input
+        className={data.className}
+        type={data.field.fieldType}
+        id={data.field.name}
+        value={data.value}
+        {...removeKeys(["fieldType", "customValidation", "validationRules", "skipValidation"], data.field)}
+        onChange={(e) => data.onChange(e, data.field.name)}
+      />
+    );
+  }
+};

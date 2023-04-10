@@ -28,11 +28,16 @@ const Navbar: React.FC = () => {
     navigate(routes.profile.path, { state: { type: "address" } });
   }, []);
 
+  const onProfileClick = useCallback(() => {
+    navigate(routes.profile.path, { state: { type: "profile" } });
+  }, []);
+
   const options: IMenuItem[] = useMemo(() => [
     {
       label: "Profile",
       path: routes.profile?.path,
-      icon: FaUserCog
+      icon: FaUserCog,
+      onClick: onProfileClick,
     },
     {
       label: "Address",
@@ -67,19 +72,18 @@ const Navbar: React.FC = () => {
             <span className={styles.logoLetter}>Q</span>Shopping
           </Link>
         </div>
-        <div className={styles.navbarToggle} onClick={() => setShowMenu(!showMenu)}>
+        <div className={styles.navbarToggle} onClick={() => setShowMenu((prev) => !prev)}>
           <FaBars />
         </div>
         <div className={`${styles.navbarMenu} ${showMenu ? styles.active : ""}`}>
           <ul className={styles.navbarItems}>
-            <li className={styles.navbarItem}>
+            <li className={styles.navbarItem} onClick={() => setShowMenu((prev) => !prev)}>
               {currentUser
                 ? (
                   <DropdownMenu
                     label="Account"
                     labelComponent={LabelComponent}
                     menuItems={options}
-                  // hideChevronIcon
                   />
                 )
                 : (
@@ -93,7 +97,7 @@ const Navbar: React.FC = () => {
                   </NavLink>
                 )}
             </li>
-            <li className={styles.navbarItem}>
+            <li className={styles.navbarItem} onClick={() => setShowMenu((prev) => !prev)}>
               <Link key={"Cart"} to={routes.cart.path}>
                 {!!cartItems.length && <span className={styles.cartCount}>{cartItems.length}</span>}
                 <FaShoppingCart />

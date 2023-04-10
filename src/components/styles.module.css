@@ -968,3 +968,14 @@ nav + .carousel {
 .tooltip:hover::before, .tooltip:hover::after{
   opacity: 1;
 }
+
+@media screen and (max-width: 991px) {
+  .tooltip::after {
+    width: auto;
+  }
+}
+
+.loginForgetPassWord {
+  text-align: right;
+  margin-top: 5px;
+}

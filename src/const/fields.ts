@@ -1,23 +1,12 @@
 import { FieldTypes, IFormField } from "../types";
 
 
-export const loginFields: IFormField[] = [
-  {
-    fieldType: FieldTypes.Email,
-    name: "username",
-    label: "Email",
-    placeholder: "someone@example.com",
-    required: true,
-  },
-  {
-    fieldType: FieldTypes.Password,
-    name: "password",
-    label: "Password",
-    placeholder: "Password",
-    required: true,
-    validationRules: { minLength: 8 },
-    skipValidation: true
-  },
+const securityQuestions: {label: string, value: string}[] = [
+  {label: "In what city were you born?", value: "1"},
+  {label: "What is the name of your favorite pet?", value: "2"},
+  {label: "What is your mother's maiden name?", value: "3"},
+  {label: "What high school did you attend?", value: "4"},
+  {label: "What was the name of your elementary school?", value: "5"}
 ];
 
 const confirmPasswordValidation: IFormField["customValidation"] = (values) => {
@@ -44,6 +33,20 @@ export const signUpFields: IFormField[] = [
     name: "email",
     placeholder: "someone@example.com",
     label: "Email Address",
+    required: true,
+  },
+  {
+    fieldType: FieldTypes.Select,
+    name: "securityQuestion",
+    placeholder: "Your security question.",
+    label: "Security Question",
+    required: true,
+    options: securityQuestions,
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "securityAnswer",
+    label: "Answer",
     required: true,
   },
   {
@@ -85,7 +88,7 @@ export const profileFields: IFormField[] = [
     placeholder: "First Name",
     label: "First Name",
     required: true,
-    validationRules: { minLength: 4 },
+    validationRules: { minLength: 3 },
   },
   {
     fieldType: FieldTypes.Text,
@@ -139,4 +142,48 @@ export const addressFields: IFormField[] = [
     required: true,
     validationRules: { minLength: 5 }
   },
+];
+
+export const passwordResetFields: IFormField[] = [
+  {
+    fieldType: FieldTypes.Email,
+    name: "username",
+    label: "Email",
+    placeholder: "someone@example.com",
+    required: true,
+  },
+  {
+    fieldType: FieldTypes.Select,
+    name: "securityQuestion",
+    placeholder: "Your security question.",
+    label: "Security Question",
+    required: true,
+    options: securityQuestions,
+  },
+  {
+    fieldType: FieldTypes.Text,
+    name: "securityAnswer",
+    label: "Answer",
+    required: true,
+  },
+  {
+    fieldType: FieldTypes.Password,
+    name: "createPassword",
+    placeholder: "Minimum 8 characters",
+    label: "Create Password",
+    required: true,
+    validationRules: { minLength: 8 },
+    tooltip: "Your password must be at least 8 characters long and contain at least one uppercase letter,"
+    + " one lowercase letter, one digit, and one special character."
+  },
+  {
+    fieldType: FieldTypes.Password,
+    name: "confirmPassword",
+    placeholder: "Confirm Password",
+    label: "Confirm Password",
+    required: true,
+    validationRules: { minLength: 8 },
+    customValidation: confirmPasswordValidation,
+    tooltip: "Please re-enter your password to confirm it. The passwords must match to proceed."
+  }
 ];

@@ -3,16 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { login, welcome } from "../../assets";
 import { routes } from "../../routes/routes";
 import LoginForm from "./components/LoginForm";
+import PasswordResetForm from "./components/PasswordResetForm";
 import SignUpForm from "./components/SignUpForm";
 import styles from "./styles.module.css";
 
 const LogInSignUpPage: React.FC<IProps> = () => {
-  const [active, setActive] = useState<boolean>(false);
+  const [signUpActive, setSignUpActive] = useState<boolean>(false);
+  const [resetActive, setResetActive] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const toggleForm = () => {
-    setActive((prevState) => !prevState);
+    setSignUpActive((prevState) => !prevState);
+  };
+  const toggleReset = () => {
+    setResetActive((prevState) => !prevState);
   };
 
   const onLoginCompleted = () => {
@@ -25,18 +30,28 @@ const LogInSignUpPage: React.FC<IProps> = () => {
 
   return (
     <div className={styles.section}>
-      <div className={`${styles.container} ${active ? styles.active : ""}`}>
+      <div className={`${styles.container} ${signUpActive ? styles.active : ""}`}>
         <div className={`${styles.user} ${styles.signinBx}`}>
           <div className={styles.imgBx}>
             <img src={login} alt="" />
           </div>
           <div className={styles.formBx + " loginWrapper"}>
-            <LoginForm onToggleForm={toggleForm} onLoginCompleted={onLoginCompleted} />
+            {resetActive ? (
+              <PasswordResetForm
+                onToggleReset={toggleReset}
+              />
+            ) : (
+              <LoginForm
+                onToggleForm={toggleForm}
+                onLoginCompleted={onLoginCompleted}
+                onToggleReset={toggleReset}
+              />
+            )}
           </div>
         </div>
         <div className={`${styles.user} ${styles.signupBx}`}>
           <div className={styles.formBx + " loginWrapper"}>
-            <SignUpForm onToggleForm={toggleForm} />
+            <SignUpForm onToggleForm={toggleForm} onLoginCompleted={onLoginCompleted} />
           </div>
           <div className={styles.imgBx}>
             <img src={welcome} alt="" />

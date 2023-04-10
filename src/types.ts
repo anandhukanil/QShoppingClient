@@ -48,6 +48,8 @@ export interface IUser {
   mobileNumber?: string;
   age?: number;
   address?: IAddress;
+  securityQuestion?: string;
+  securityAnswer?: string;
 }
 
 export interface IUserData extends IUser {
@@ -143,7 +145,17 @@ export enum FieldTypes {
   Number = "number",
   Password = "password",
   Email = "email",
+  Select = "select",
   Submit = "submit",
+}
+
+export interface IFormFieldProps {
+  id:string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
+  field: IFormField;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
+  className: string;
 }
 export interface IFormField {
   fieldType: FieldTypes;
@@ -154,6 +166,7 @@ export interface IFormField {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  component?: React.FC<IFormFieldProps>;
   validationRules?: {
     minLength?: number;
     maxLength?: number;
@@ -161,6 +174,7 @@ export interface IFormField {
   customValidation?: (values: Record<string, string>, name: string) => ({success: boolean, error: string});
   tooltip?: string;
   skipValidation?: boolean;
+  options?: { label: string, value: string}[];
 }
 
 export enum LocalData {

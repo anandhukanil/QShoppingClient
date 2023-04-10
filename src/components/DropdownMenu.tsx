@@ -16,7 +16,7 @@ const DropdownMenu: React.FC<IProps> = (props) => {
   };
 
   const onClick = () => {
-    setOpen(false);
+    setOpen((prevState) => !prevState);
   };
   
   return (

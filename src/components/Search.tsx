@@ -22,10 +22,10 @@ const Search: React.FC<IProps> = () => {
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Enter") {
-      if ((ref.current?.value as string)?.length < 4) {
+      if ((ref.current?.value as string)?.length < 3) {
         dispatch({
           type: Types.SET_NOTIFICATION,
-          payload: { type: NotificationTypes.Error, message: "Please type at least 4 character!" }
+          payload: { type: NotificationTypes.Error, message: "Please type at least 3 character!" }
         });
         return;
       }

@@ -71,3 +71,12 @@ export const wishlistItem = (item: IProduct, id: string, action: "add"|"remove" 
     id,
   })
 );
+
+export const resetPassword = (username: string, password: string, securityQuestion: string, securityAnswer: string) => (
+  axios.post("/auth/reset", {
+    username,
+    password,
+    securityQuestion,
+    securityAnswer,
+  })
+);
