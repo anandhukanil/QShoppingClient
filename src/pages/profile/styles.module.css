@@ -13,7 +13,7 @@
 .wishlistItemsContainer {
   display: grid;
   grid-template-columns: repeat(auto-fill, 350px);
-  justify-content: space-between;
+  justify-content: center;
   grid-gap: 30px 10px;
 }
 .wishlistItemsContainer > div {

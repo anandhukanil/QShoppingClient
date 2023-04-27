@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { refreshToken } from "../apis/users";
@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import Notifications from "../components/Notifications";
 import { IState, LocalData, NotificationTypes, Types } from "../types";
+import LoadingComponent from "../components/LoadingComponent";
 
 const Layout: React.FC<IProps> = () => {
   const { accessToken } = useSelector((state: IState) => state.users);
@@ -77,7 +78,9 @@ const Layout: React.FC<IProps> = () => {
       <NavBar />
       <Notifications />
       <div style={contentWrapperStyles}>
-        <Outlet />
+        <Suspense fallback={<div style={loaderStyles}><LoadingComponent /></div>}>
+          <Outlet />
+        </Suspense>
       </div>
       <Footer />
     </main>
@@ -94,4 +97,10 @@ const layoutStyles: React.CSSProperties = {
 const contentWrapperStyles: React.CSSProperties = {
   minHeight: "calc(100vh - 358px)",
   padding: "0 16px",
+};
+const loaderStyles: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "calc(100vh - 317px)"
 };

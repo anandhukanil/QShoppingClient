@@ -4,18 +4,21 @@ import { routes } from "../routes/routes";
 import { IRoute } from "../types";
 import Layout from "./Layout";
 import ProtectedRoute from "./ProtectedRoute";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 
 const App: React.FC = () => {
   
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        {(Object.keys(routes) as (keyof (typeof routes))[]).map((key) => (
-          getRouteElementWithChildren(routes[key])
-        ))}
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {(Object.keys(routes) as (keyof (typeof routes))[]).map((key) => (
+            getRouteElementWithChildren(routes[key])
+          ))}
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   );
 };
 

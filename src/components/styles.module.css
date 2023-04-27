@@ -814,6 +814,9 @@ nav + .carousel {
   height: 100vh;
   width: calc(100vw - 32px);
 }
+.errorFullPageWrapper.removePadding {
+  width: 100vw;
+}
 .errorPageWrapper {
   display: flex;
   flex-direction: column;
@@ -978,4 +981,35 @@ nav + .carousel {
 .loginForgetPassWord {
   text-align: right;
   margin-top: 5px;
+}
+
+/* Error Boundary Component Styles */
+
+.errorDetailsWrapper {
+  width: 100%;
+  max-width: 80vw;
+  margin: auto;
+  height: 100px;
+  padding: 10px;
+  background-color: #eaeaea;
+  font-size: smaller;
+  text-align: left;
+  overflow: auto;
+}
+
+.errorDetailsWrapper pre {
+  white-space: pre-wrap;
+}
+
+.showErrorDetailsButton {
+  border: none;
+  background-color: white;
+  color: var(--primary);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.showErrorDetailsButton:hover {
+  cursor: pointer;
+  color: var(--primaryDark);
 }
