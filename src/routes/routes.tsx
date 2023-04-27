@@ -1,13 +1,13 @@
-import React from "react";
-import CartPage from "../pages/cart/CartPage";
-import LandingPage from "../pages/landing/LandingPage";
-import Profile from "../pages/profile/Profile";
-import Wishlist from "../pages/profile/Wishlist";
+import React, { lazy } from "react";
 import { IRoutes } from "../types";
-import ProductDetailsPage from "../pages/listing/ProductDetailsPage";
-import ProductListing from "../pages/listing/ProductListing";
-import LogInSignUpPage from "../pages/login/LogInSignUpPage";
-import Orders from "../pages/profile/Orders";
+const CartPage = lazy(() => import("../pages/cart/CartPage"));
+const LandingPage = lazy(() => import("../pages/landing/LandingPage"));
+const Profile = lazy(() => import("../pages/profile/Profile"));
+const Wishlist = lazy(() => import("../pages/profile/Wishlist"));
+const ProductDetailsPage = lazy(() => import("../pages/listing/ProductDetailsPage"));
+const ProductListing = lazy(() => import("../pages/listing/ProductListing"));
+const LogInSignUpPage = lazy(() => import("../pages/login/LogInSignUpPage"));
+const Orders = lazy(() => import("../pages/profile/Orders"));
 
 export const routes: IRoutes = {
   landing: {

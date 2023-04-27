@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   FaBoxOpen, FaHeart, FaSignOutAlt, FaUser, FaUserCog,
-  FaBars, FaShoppingCart, FaSignInAlt, FaAddressCard
+  FaBars, FaShoppingCart, FaSignInAlt, FaAddressCard, FaTimes
 } from "react-icons/fa";
 import { IMenuItem, IState, Types } from "../types";
 import { routes } from "../routes/routes";
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className={styles.navbarToggle} onClick={() => setShowMenu((prev) => !prev)}>
-          <FaBars />
+          {showMenu ? <FaTimes /> : <FaBars />}
         </div>
         <div className={`${styles.navbarMenu} ${showMenu ? styles.active : ""}`}>
           <ul className={styles.navbarItems}>

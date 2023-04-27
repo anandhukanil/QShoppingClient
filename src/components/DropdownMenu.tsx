@@ -15,7 +15,8 @@ const DropdownMenu: React.FC<IProps> = (props) => {
     setOpen(false);
   };
 
-  const onClick = () => {
+  const onClick = (e: any)=> {
+    e.stopPropagation();
     setOpen((prevState) => !prevState);
   };
   
@@ -28,7 +29,7 @@ const DropdownMenu: React.FC<IProps> = (props) => {
     >
       <div className='dropdown-header'>
         {props.labelComponent ? <props.labelComponent /> : props.label}
-        {!props.hideChevronIcon && <FaChevronRight className={`icon ${isOpen && "open"}`} />}
+        {!props.hideChevronIcon && <FaChevronRight id="dropdown-arrow" className={`icon ${isOpen && "open"}`} onClick={onClick}/>}
       </div>
       <div className={`dropdown-body ${isOpen && "open"}`}>
         {props.menuItems?.map((item) => (
