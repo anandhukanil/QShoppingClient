@@ -7,10 +7,10 @@ import axios from "axios";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { OAuthClientID } from "./const/creds";
 
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://qshopping-server.azurewebsites.net";
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+const OAuthClientID = process.env.REACT_APP_OAuthClientID||"";
 // axios.defaults.baseURL = "http://localhost:3001";
 
 const root = ReactDOM.createRoot(
